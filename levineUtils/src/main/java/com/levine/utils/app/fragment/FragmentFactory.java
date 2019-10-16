@@ -3,10 +3,12 @@ package com.levine.utils.app.fragment;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+
 import com.levine.utils.base.ClassUtils;
-import com.levine.utils.base.LogUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -20,7 +22,8 @@ public class FragmentFactory {
     private ArrayList<Class> fragmentClasses;
     private FragmentActivity activity;
     private String mCurrentTag = null;
-
+    private boolean isCallingRestoreStateMethod = false;
+    FragmentManager fragmentManager = null;
 
     private FragmentFactory() {
 
@@ -41,12 +44,13 @@ public class FragmentFactory {
     /**
      * @param activity        需要FragmentActivity或者AppCompatActivity或者两者的子类
      * @param containerViewId 展示fragment的容器的id
-     * @return
+     * @return Fragment object
      */
     public FragmentFactory init(FragmentActivity activity, int containerViewId) {
 
         this.fragmentClasses = ClassUtils.getClassesByAnnotation(TargetFragmentTag.class, activity.getPackageCodePath(), activity.getPackageName());
         this.activity = activity;
+        this.fragmentManager =activity.getSupportFragmentManager();
         this.containerViewId = containerViewId;
         return this;
     }
@@ -59,7 +63,6 @@ public class FragmentFactory {
      * @return 返回TargetFragment中value=tag的Fragment.Class
      */
     private Class isFragmentTag(String tag) {
-        LogUtils.e("fragmentClasses size:" + fragmentClasses.size());
         for (Class c : fragmentClasses) {
             TargetFragmentTag annotation = (TargetFragmentTag) c.getAnnotation(TargetFragmentTag.class);
             String fragmentTag = annotation.value();
@@ -71,18 +74,14 @@ public class FragmentFactory {
     }
 
     private Fragment getFragmentByTag(String tag) {
-
         if (!mHashMap.containsKey(tag)) {
             try {
                 Class c = isFragmentTag(tag);
                 if (c != null) {
-
                     mHashMap.put(tag, (Fragment) c.newInstance());
                 }
 
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InstantiationException e) {
+            } catch (IllegalAccessException | InstantiationException e) {
                 e.printStackTrace();
             }
         }
@@ -104,17 +103,16 @@ public class FragmentFactory {
             throw new IllegalAccessError("tag is error!");
         }
         //如果选择的是本页面
-        if (tag.equals(mCurrentTag)) {
+        if (tag.equals(mCurrentTag) && !isCallingRestoreStateMethod) {
             return mCurrentTag;
         } else {
             //如果准备切换页面(fragment)
-            FragmentManager fragmentManager = activity.getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            if (!TextUtils.isEmpty(mCurrentTag)) {
+            if (!TextUtils.isEmpty(mCurrentTag)&& !isCallingRestoreStateMethod) {
                 //已经有fragment被初始化了(因为mCurrentTag初始值为null)，则隐藏当前的fragment
                 transaction.hide(getFragmentByTag(mCurrentTag));
             }
-            if (!baseFragment.isAdded()) {
+            if (!baseFragment.isAdded() /*&& fragmentManager.findFragmentByTag(tag)==null*/) {
                 //如果这个fragment还没有被添加到容器里，说明是第一次加载,没有使用replace方法(fragment会被销毁)，则可以重用fragment
                 transaction.add(this.containerViewId, baseFragment, tag);
             } else {
@@ -128,8 +126,11 @@ public class FragmentFactory {
     }
 
     public Bundle saveCurrentFragmentInfo(Bundle bundle) {
-        if (bundle != null)
+        if (bundle != null){
             bundle.putString("currentTag", mCurrentTag);
+            fragmentManager.putFragment(bundle,mCurrentTag,getFragmentByTag(mCurrentTag));
+            isCallingRestoreStateMethod = true;
+        }
         return bundle;
     }
 
@@ -137,6 +138,7 @@ public class FragmentFactory {
         if (bundle != null) {
             String tag = bundle.getString("currentTag");
             showFragment(tag);
+            isCallingRestoreStateMethod = false;
         }
     }
 
