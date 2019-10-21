@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +39,6 @@ public class RecyclerViewPager extends RecyclerView {
             }
         }
         int o=Integer.parseInt(orientation);
-
         LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(o);
         this.setLayoutManager(llm);
@@ -56,8 +54,8 @@ public class RecyclerViewPager extends RecyclerView {
                     int firs = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
                     if (position != firs){
                         position = firs;
-                        if (onpagerChageListener != null)
-                            onpagerChageListener.onPageChange(position);
+                        if (onPagerChangeListener != null)
+                            onPagerChangeListener.onPageChange(position);
                     }
                 }
             }
@@ -80,12 +78,12 @@ public class RecyclerViewPager extends RecyclerView {
         return ((LinearLayoutManager)layoutManager).findFirstVisibleItemPosition();
     }
 
-
-    interface onPagerChangeListener{
+    public interface onPagerChangeListener{
         void onPageChange(int position);
     }
-    private onPagerChangeListener onpagerChageListener;
+    private onPagerChangeListener onPagerChangeListener;
+
     public void setOnPagerChageListener(onPagerChangeListener onpagerChageListener){
-        this.onpagerChageListener = onpagerChageListener;
+        this.onPagerChangeListener = onpagerChageListener;
     }
 }
