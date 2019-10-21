@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 import com.levine.base.fragment.FragmentTag;
 import com.levine.utils.app.fragment.FragmentFactory;
+import com.levine.utils.base.LogUtils;
 
 public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnTabSelectedListener {
     private FragmentFactory mFactory;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
         mFactory = FragmentFactory.getInstance().init(this, R.id.mContentFl);
 
         if (savedInstanceState != null) {
+            LogUtils.e("onCreate savedInstanceState");
             mFactory.restoreCurrentFragmentInfo(savedInstanceState);
         } else {
 
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+        LogUtils.e("onSaveInstanceState");
         //保存我的tab选择状态
         int currentTab = mTabLayout.getSelectedTabPosition();
         outState.putInt("currentTab", currentTab);
@@ -65,8 +68,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        LogUtils.e("onRestoreInstanceState");
         //回复我的tab选择状态
         int currentTab = savedInstanceState.getInt("currentTab");
         mTabLayout.getTabAt(currentTab).select();
+        if (savedInstanceState != null) {
+            mFactory.restoreCurrentFragmentInfo(savedInstanceState);
+        }
     }
 }
