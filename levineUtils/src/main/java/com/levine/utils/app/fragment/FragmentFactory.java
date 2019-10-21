@@ -112,7 +112,7 @@ public class FragmentFactory {
                 //已经有fragment被初始化了(因为mCurrentTag初始值为null)，则隐藏当前的fragment
                 transaction.hide(getFragmentByTag(mCurrentTag));
             }
-            if (!baseFragment.isAdded() /*&& fragmentManager.findFragmentByTag(tag)==null*/) {
+            if (!baseFragment.isAdded() && fragmentManager.findFragmentByTag(tag)==null) {
                 //如果这个fragment还没有被添加到容器里，说明是第一次加载,没有使用replace方法(fragment会被销毁)，则可以重用fragment
                 transaction.add(this.containerViewId, baseFragment, tag);
             } else {
@@ -128,7 +128,6 @@ public class FragmentFactory {
     public Bundle saveCurrentFragmentInfo(Bundle bundle) {
         if (bundle != null){
             bundle.putString("currentTag", mCurrentTag);
-            fragmentManager.putFragment(bundle,mCurrentTag,getFragmentByTag(mCurrentTag));
             isCallingRestoreStateMethod = true;
         }
         return bundle;
