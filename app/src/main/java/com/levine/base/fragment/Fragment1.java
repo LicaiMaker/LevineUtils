@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
 import com.levine.base.R;
 import com.levine.base.view.Fragment1RecyclerViewAdapter;
 import com.levine.utils.app.fragment.TargetFragmentTag;
@@ -26,6 +27,12 @@ public class Fragment1 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1, container, false);
+       init(view);
+        return view;
+    }
+
+
+    public void init(View view){
         List pageDatas = new ArrayList<HashMap<String, Object>>();
         pageDatas.add(new HashMap<String, Object>() {{
             put("mFragment1TV", "callhistory");
@@ -37,9 +44,10 @@ public class Fragment1 extends Fragment {
             put("mFragment1IV", R.mipmap.ic_launcher);
             put("type", "ad");
         }});
-        RecyclerViewPager recyclerViewPager = view.findViewById(R.id.mRVPager);
+        final RecyclerViewPager recyclerViewPager = view.findViewById(R.id.mRVPager);
         Fragment1RecyclerViewAdapter adapter = new Fragment1RecyclerViewAdapter(pageDatas, this.getActivity(), R.layout.horizontal_viewpager_page_view);
-
+        final TabLayout tabLayout=view.findViewById(R.id.mFragment1TL);
+        //多布局支持
         adapter.setMultiTypeSupport(new BaseRecyclerViewAdapter.MultiTypeSupport<HashMap<String, Object>>() {
             @Override
             public int getLayoutId(HashMap<String, Object> item) {
@@ -60,6 +68,6 @@ public class Fragment1 extends Fragment {
             }
         });
         recyclerViewPager.setAdapter(adapter);
-        return view;
+        recyclerViewPager.setTabLayout(tabLayout);
     }
 }

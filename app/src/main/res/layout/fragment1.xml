@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/mFragment1TL"
+        android:layout_weight="0.1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        >
+        <com.google.android.material.tabs.TabItem
+            android:text="tab1"
+            android:id="@+id/mTab1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
 
-
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/mTab2"
+            android:text="tab2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+    </com.google.android.material.tabs.TabLayout>
     <com.levine.utils.app.view.RecyclerViewPager
         android:id="@+id/mRVPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"
         android:orientation="horizontal"
-        />
+        >
+
+
+    </com.levine.utils.app.view.RecyclerViewPager>
 
 
 
