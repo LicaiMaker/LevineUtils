@@ -4,6 +4,10 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
+
+import com.google.android.material.tabs.TabLayout;
+import com.levine.utils.base.LogUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,11 +19,11 @@ import androidx.recyclerview.widget.SnapHelper;
 public class RecyclerViewPager extends RecyclerView {
 
     public RecyclerViewPager(@NonNull Context context) {
-        this(context,null,0);
+        this(context, null, 0);
     }
 
     public RecyclerViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context,attrs,0);
+        this(context, attrs, 0);
     }
 
     public RecyclerViewPager(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
@@ -28,38 +32,74 @@ public class RecyclerViewPager extends RecyclerView {
         init(attrs);
     }
 
-    private int position=0;
+    private TabLayout mTabLayout = null;
+    private int orientation = 0;
+
+    public void setTabLayout(TabLayout tabLayout) {
+        this.mTabLayout = tabLayout;
+        final RecyclerViewPager that = this;
+        if (mTabLayout != null) {
+            mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    that.setOnPagerPosition(tab.getPosition());
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+        }
+    }
+
     private void init(AttributeSet attrs) {
 
-        String orientation="0";
-        if(attrs!=null){
-            orientation=attrs.getAttributeValue("http://schemas.android.com/apk/res/android","orientation");
-            if(TextUtils.isEmpty(orientation)){
-                orientation="0";
+        String o = "0";
+        if (attrs != null) {
+            o = attrs.getAttributeValue("http://schemas.android.com/apk/res/android", "orientation");
+            if (TextUtils.isEmpty(o)) {
+                o = "0";
             }
         }
-        int o=Integer.parseInt(orientation);
-        LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
-        llm.setOrientation(o);
+        orientation = Integer.parseInt(o);
+        final LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
+        llm.setOrientation(orientation);
         this.setLayoutManager(llm);
-        SnapHelper snapHelper = new PagerSnapHelper();
+        final SnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(this);
         //this.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.HORIZONTAL));
         this.addOnScrollListener(new OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                if (layoutManager instanceof LinearLayoutManager){
-                    int firs = ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
-                    if (position != firs){
-                        position = firs;
-                        if (onPagerChangeListener != null)
-                            onPagerChangeListener.onPageChange(position);
-                    }
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        View viewIdle = snapHelper.findSnapView(llm);
+                        if (viewIdle != null) {
+                            int position = llm.getPosition(viewIdle);
+                            if (onPagerChangeListener != null)
+                                onPagerChangeListener.onPageChange(position);
+                            if (mTabLayout != null) {
+                                mTabLayout.getTabAt(position).select();
+                            }
+                        }
+                        break;
                 }
+
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
+
 
     }
 
@@ -68,22 +108,23 @@ public class RecyclerViewPager extends RecyclerView {
         return super.dispatchTouchEvent(ev);
     }
 
-    public void setOnPagerPosition(int position){
+    public void setOnPagerPosition(int position) {
         RecyclerView.LayoutManager layoutManager = this.getLayoutManager();
         layoutManager.scrollToPosition(position);
     }
 
-    public int getOnPagerPosition(){
+    public int getOnPagerPosition() {
         RecyclerView.LayoutManager layoutManager = this.getLayoutManager();
-        return ((LinearLayoutManager)layoutManager).findFirstVisibleItemPosition();
+        return ((LinearLayoutManager) layoutManager).findFirstVisibleItemPosition();
     }
 
-    public interface onPagerChangeListener{
+    public interface OnPagerChangeListener {
         void onPageChange(int position);
     }
-    private onPagerChangeListener onPagerChangeListener;
 
-    public void setOnPagerChageListener(onPagerChangeListener onpagerChageListener){
+    private OnPagerChangeListener onPagerChangeListener;
+
+    public void setOnPagerChageListener(OnPagerChangeListener onpagerChageListener) {
         this.onPagerChangeListener = onpagerChageListener;
     }
 }
