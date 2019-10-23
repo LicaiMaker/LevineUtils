@@ -67,6 +67,8 @@ public abstract class BaseRecyclerViewAdapter<T> extends RecyclerView.Adapter<Ba
         return super.getItemViewType(position);
     }
 
+
+
     public void setMultiTypeSupport(MultiTypeSupport<T> multiTypeSupport){
         this.multiTypeSupport=multiTypeSupport;
     }

@@ -87,5 +87,42 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         view.setVisibility(visibility);
         return this;
     }
+
+    /**
+     * 设置recyclerview的适配器，用于recyclerview嵌套时使用
+     * @param viewId recyclerview的id
+     * @param adapter recyclerview的adapter
+     * @return
+     */
+    public BaseViewHolder setRecyclerViewAdapter(int viewId,BaseRecyclerViewAdapter adapter){
+        RecyclerView recyclerView=getViewAtId(viewId);
+        recyclerView.setAdapter(adapter);
+        return this;
+    }
+
+    /**
+     * 设置view的点击事件
+     * @param viewId view的id
+     * @param listener View.OnClickListener
+     * @return
+     */
+    public BaseViewHolder setOnViewClickListener(int viewId,View.OnClickListener listener){
+        View view=getViewAtId(viewId);
+        view.setOnClickListener(listener);
+        return this;
+    }
+
+    /**
+     * 设置view的长按点击事件
+     * @param viewId view的id
+     * @param listener View.OnLongClickListener
+     * @return
+     */
+    public BaseViewHolder setOnViewLongClickListener(int viewId,View.OnLongClickListener listener){
+        View view=getViewAtId(viewId);
+        view.setOnLongClickListener(listener);
+        return this;
+    }
+
 }
 

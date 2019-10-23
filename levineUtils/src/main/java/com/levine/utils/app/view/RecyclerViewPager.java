@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
-import com.levine.utils.base.LogUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,7 +32,8 @@ public class RecyclerViewPager extends RecyclerView {
     }
 
     private TabLayout mTabLayout = null;
-    private int orientation = 0;
+    private int orientation = RecyclerView.HORIZONTAL;
+    int cPos=0;
 
     public void setTabLayout(TabLayout tabLayout) {
         this.mTabLayout = tabLayout;
@@ -83,6 +83,7 @@ public class RecyclerViewPager extends RecyclerView {
                         View viewIdle = snapHelper.findSnapView(llm);
                         if (viewIdle != null) {
                             int position = llm.getPosition(viewIdle);
+                            cPos=position;
                             if (onPagerChangeListener != null)
                                 onPagerChangeListener.onPageChange(position);
                             if (mTabLayout != null) {
@@ -103,6 +104,28 @@ public class RecyclerViewPager extends RecyclerView {
 
     }
 
+
+    private boolean isScrollVerticallyEnable=true;
+    private boolean isScrollHorizontallyEnable=true;
+
+    public void setScrollVerticallyEnable(boolean scrollVerticallyEnable) {
+        isScrollVerticallyEnable = scrollVerticallyEnable;
+    }
+
+    public void setScrollHorizontallyEnable(boolean scrollHorizontallyEnable) {
+        isScrollHorizontallyEnable = scrollHorizontallyEnable;
+    }
+
+    @Override
+    public boolean canScrollHorizontally(int direction) {
+        return isScrollHorizontallyEnable&&super.canScrollHorizontally(direction);
+    }
+
+    @Override
+    public boolean canScrollVertically(int direction) {
+        return isScrollVerticallyEnable&&super.canScrollVertically(direction);
+    }
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         return super.dispatchTouchEvent(ev);
@@ -120,6 +143,8 @@ public class RecyclerViewPager extends RecyclerView {
 
     public interface OnPagerChangeListener {
         void onPageChange(int position);
+
+
     }
 
     private OnPagerChangeListener onPagerChangeListener;
