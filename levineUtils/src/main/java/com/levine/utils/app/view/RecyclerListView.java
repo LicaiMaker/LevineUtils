@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -40,6 +41,6 @@ public class RecyclerListView extends RecyclerView {
         this.setLayoutManager(llm);
         SnapHelper snapHelper=new LinearSnapHelper();
         snapHelper.attachToRecyclerView(this);
-
+        this.addItemDecoration(new DividerItemDecoration(this.getContext(),DividerItemDecoration.VERTICAL));
     }
 }

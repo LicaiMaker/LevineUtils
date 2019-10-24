@@ -124,5 +124,17 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
+    /**
+     * 设置textview的字体颜色
+     * @param viewId TextView的id
+     * @param color 颜色值
+     * @return
+     */
+    public BaseViewHolder setTextColor(int viewId,int color){
+        TextView textView=getViewAtId(viewId);
+        textView.setTextColor(color);
+        return this;
+    }
+
 }
 
