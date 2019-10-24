@@ -15,18 +15,20 @@ import androidx.recyclerview.widget.SnapHelper;
 
 public class RecyclerListView extends RecyclerView {
     public RecyclerListView(@NonNull Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public RecyclerListView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context,attrs,0);
+        this(context, attrs, 0);
     }
 
     public RecyclerListView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs);
     }
+
     private int orientation = RecyclerView.VERTICAL;//默认为纵向
+
     private void init(AttributeSet attrs) {
         String o = "0";
         if (attrs != null) {
@@ -39,8 +41,9 @@ public class RecyclerListView extends RecyclerView {
         final LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(orientation);
         this.setLayoutManager(llm);
-        SnapHelper snapHelper=new LinearSnapHelper();
+        SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(this);
-        this.addItemDecoration(new DividerItemDecoration(this.getContext(),DividerItemDecoration.VERTICAL));
+        if (orientation == RecyclerView.VERTICAL)
+            this.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
     }
 }
