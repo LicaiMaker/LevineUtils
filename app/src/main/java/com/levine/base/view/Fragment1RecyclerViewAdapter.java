@@ -5,12 +5,11 @@ import android.content.Context;
 import com.levine.base.R;
 import com.levine.utils.app.view.adapter.BaseRecyclerViewAdapter;
 import com.levine.utils.app.view.adapter.BaseViewHolder;
+import com.levine.utils.base.LogUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMap<String,Object>> {
     public Fragment1RecyclerViewAdapter(List list, Context mContext, int layId) {
@@ -28,9 +27,21 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
                 holder.setText(R.id.mFragment1TV, (CharSequence) itemData.get("mFragment1TV"));
                 int imgId= (int) itemData.get("mFragment1IV");
                 holder.setImageFromRes(R.id.mFragment1IV,imgId);
+
                 break;
             case "normal":
-                holder.setText(R.id.mFragment1TV, (CharSequence) itemData.get("mFragment1TV"));
+//                holder.setText(R.id.mFragment1TV, (CharSequence) itemData.get("mFragment1TV"));
+                List<HashMap<String,Object>> list=new ArrayList<>();
+                list.add(new HashMap<String, Object>(){{
+                    put("text","item1");
+                }});
+                list.add(new HashMap<String, Object>(){{
+                    put("text","item2");
+                }});
+                Fragment1ListviewAdapter adapter=new Fragment1ListviewAdapter(list,mContext,R.layout.list_item_view);
+                holder.setRecyclerViewAdapter(R.id.mFragment1RV,adapter);
+                LogUtils.e("setting Fragment1ListviewAdapter：");
+                adapter.notifyDataSetChanged();
                 break;
         }
 

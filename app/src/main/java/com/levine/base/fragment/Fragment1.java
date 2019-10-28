@@ -33,6 +33,7 @@ public class Fragment1 extends Fragment {
 
 
     public void init(View view){
+
         List pageDatas = new ArrayList<HashMap<String, Object>>();
         pageDatas.add(new HashMap<String, Object>() {{
             put("mFragment1TV", "callhistory");
@@ -55,7 +56,6 @@ public class Fragment1 extends Fragment {
                 if (type.equals("ad")) {
                     return R.layout.horizontal_viewpager_page_view_ad;
                 } else {
-
                     return R.layout.horizontal_viewpager_page_view;
                 }
             }
@@ -69,5 +69,8 @@ public class Fragment1 extends Fragment {
         });
         recyclerViewPager.setAdapter(adapter);
         recyclerViewPager.setTabLayout(tabLayout);
+        recyclerViewPager.setScrollHorizontallyEnable(false);
+
     }
+
 }

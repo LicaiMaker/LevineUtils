@@ -4,8 +4,12 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="f2"/>
+        android:background="@drawable/circle_view"
+        android:src="@mipmap/ic_launcher"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="哈哈哈"/>
 
 </LinearLayout>
