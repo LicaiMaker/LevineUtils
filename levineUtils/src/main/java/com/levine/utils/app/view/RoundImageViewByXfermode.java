@@ -21,7 +21,7 @@ import java.lang.ref.WeakReference;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
-public class CircleImageView extends AppCompatImageView {
+public class RoundImageViewByXfermode extends AppCompatImageView {
 
     private Paint mPaint;
     private Xfermode mXfermode = new PorterDuffXfermode(PorterDuff.Mode.DST_IN);
@@ -44,14 +44,14 @@ public class CircleImageView extends AppCompatImageView {
      */
     private int mBorderRadius;
 
-    public CircleImageView(Context context) {
+    public RoundImageViewByXfermode(Context context) {
         this(context, null);
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
     }
 
-    public CircleImageView(Context context, AttributeSet attrs) {
+    public RoundImageViewByXfermode(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         mPaint = new Paint();
