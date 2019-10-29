@@ -9,8 +9,8 @@
 
     <com.levine.utils.app.view.RoundImageViewByXfermode
         android:src="@mipmap/ic_launcher"
-        levine:type="circle"
-        levine:borderRadius="10dp"
+        levine:type="round"
+        levine:borderRadius="@dimen/cardview_default_elevation"
         android:layout_width="50dp"
         android:layout_height="50dp"/>
     <TextView

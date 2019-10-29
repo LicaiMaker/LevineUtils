@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
+
         LogUtils.e("onSaveInstanceState");
         //保存我的tab选择状态
         int currentTab = mTabLayout.getSelectedTabPosition();

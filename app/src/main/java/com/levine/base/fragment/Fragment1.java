@@ -11,6 +11,8 @@ import com.levine.base.view.Fragment1RecyclerViewAdapter;
 import com.levine.utils.app.fragment.TargetFragmentTag;
 import com.levine.utils.app.view.RecyclerViewPager;
 import com.levine.utils.app.view.adapter.BaseRecyclerViewAdapter;
+import com.levine.utils.base.LevineAnnotationUtils;
+import com.levine.utils.base.LevineBindView;
 import com.levine.utils.base.LogUtils;
 
 import java.util.ArrayList;
@@ -23,11 +25,16 @@ import androidx.fragment.app.Fragment;
 
 @TargetFragmentTag(FragmentTag.FRAGMENT1)
 public class Fragment1 extends Fragment {
+    @LevineBindView(R.id.mFragment1TL)
+    TabLayout tabLayout;
+    @LevineBindView(R.id.mRVPager)
+    RecyclerViewPager recyclerViewPager;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1, container, false);
-       init(view);
+        LevineAnnotationUtils.bind(this,view);
+        init(view);
         return view;
     }
 
@@ -45,9 +52,9 @@ public class Fragment1 extends Fragment {
             put("mFragment1IV", R.mipmap.ic_launcher);
             put("type", "ad");
         }});
-        final RecyclerViewPager recyclerViewPager = view.findViewById(R.id.mRVPager);
+
         Fragment1RecyclerViewAdapter adapter = new Fragment1RecyclerViewAdapter(pageDatas, this.getActivity(), R.layout.horizontal_viewpager_page_view);
-        final TabLayout tabLayout=view.findViewById(R.id.mFragment1TL);
+
         //多布局支持
         adapter.setMultiTypeSupport(new BaseRecyclerViewAdapter.MultiTypeSupport<HashMap<String, Object>>() {
             @Override
@@ -73,4 +80,29 @@ public class Fragment1 extends Fragment {
 
     }
 
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        LogUtils.e("onActivityCreated:");
+
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        // 保存fragment的状态
+        LogUtils.e("position:onSaveInstanceState");
+        outState.putInt("tabPosition",tabLayout.getSelectedTabPosition());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if(savedInstanceState!=null){
+            //回复fragment的状态
+            int position=savedInstanceState.getInt("tabPosition");
+            tabLayout.getTabAt(position).select();
+            LogUtils.e("position:onViewStateRestored:"+position);
+        }
+    }
 }

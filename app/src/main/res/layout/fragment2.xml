@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/mHahaTV"
         android:background="@drawable/circle_view"
         android:src="@mipmap/ic_launcher"
         android:gravity="center"
