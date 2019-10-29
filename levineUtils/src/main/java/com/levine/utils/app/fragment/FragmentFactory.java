@@ -128,7 +128,7 @@ public class FragmentFactory {
     public Bundle saveCurrentFragmentInfo(Bundle bundle) {
         if (bundle != null){
             bundle.putString("currentTag", mCurrentTag);
-            isCallingRestoreStateMethod = true;
+            getFragmentByTag(mCurrentTag).onSaveInstanceState(bundle);
         }
         return bundle;
     }
@@ -136,7 +136,9 @@ public class FragmentFactory {
     public void restoreCurrentFragmentInfo(Bundle bundle) {
         if (bundle != null) {
             String tag = bundle.getString("currentTag");
+            isCallingRestoreStateMethod = true;
             showFragment(tag);
+            getFragmentByTag(tag).onViewStateRestored(bundle);
             isCallingRestoreStateMethod = false;
         }
     }
