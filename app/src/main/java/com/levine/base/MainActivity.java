@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.SectionIndexer;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 import com.levine.base.fragment.FragmentTag;
@@ -27,9 +30,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
             LogUtils.e("onCreate savedInstanceState");
             mFactory.restoreCurrentFragmentInfo(savedInstanceState);
         } else {
-
             mFactory.showFragment(FragmentTag.FRAGMENT1);
         }
+
 
     }
 
@@ -75,6 +78,38 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
         mTabLayout.getTabAt(currentTab).select();
         if (savedInstanceState != null) {
             mFactory.restoreCurrentFragmentInfo(savedInstanceState);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        backOperation1();
+
+    }
+
+    public void backOperation1() {
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.MAIN");
+        intent.addCategory("android.intent.category.HOME");
+        startActivity(intent);
+    }
+
+    private long lastPressTime = 0l;
+    private int timeExpired = 1500;
+
+    public void backOperation2() {
+        if (System.currentTimeMillis() - lastPressTime > timeExpired) {
+            Toast.makeText(MainActivity.this, "再按一次退出Ucall", Toast.LENGTH_SHORT).show();
+            lastPressTime = System.currentTimeMillis();
+        } else {
+            finish();
+            System.exit(0);
         }
     }
 }

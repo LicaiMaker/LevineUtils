@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <com.levine.utils.app.view.RecyclerListView
+
         android:orientation="vertical"
         android:id="@+id/mFragment1RV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</LinearLayout>
+    <TextView
+        android:textColor="#FFF"
+        android:textSize="35sp"
+        android:visibility="gone"
+        android:gravity="center"
+        android:background="#90000000"
+        android:id="@+id/mIndexTV"
+        android:layout_centerInParent="true"
+        android:layout_width="80dp"
+        android:layout_height="80dp"/>
+    <com.levine.utils.app.view.IndexBar
+       android:layout_centerVertical="true"
+        android:id="@+id/mIndexBar"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        app:textSize="15sp"
+        app:pressBackground="#90ffffff"
+        app:unpressBackground="#90ffffff"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

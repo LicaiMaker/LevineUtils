@@ -91,6 +91,7 @@ public class Fragment1 extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         // 保存fragment的状态
+        super.onSaveInstanceState(outState);
         LogUtils.e("position:onSaveInstanceState");
         outState.putInt("tabPosition",tabLayout.getSelectedTabPosition());
     }
@@ -105,4 +106,6 @@ public class Fragment1 extends Fragment {
             LogUtils.e("position:onViewStateRestored:"+position);
         }
     }
+
+
 }
