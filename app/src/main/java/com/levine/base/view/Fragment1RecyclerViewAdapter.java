@@ -77,7 +77,7 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
                         .setmPressedShowTextView(mIndexTV)
                         .setmLayoutManager((LinearLayoutManager) recyclerListView.getLayoutManager())
                         .setIndexTextColor(Color.GRAY)
-                        .setSelectedTextColor(Color.BLACK);
+                        .setSelectedTextColor(Color.BLACK) ;
                 //和indexbar联动
                 recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
