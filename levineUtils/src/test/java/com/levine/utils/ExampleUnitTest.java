@@ -3,6 +3,8 @@ package com.levine.utils;
 import android.app.Activity;
 import android.app.FragmentManager;
 
+import com.levine.utils.base.PinYinUtils;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -31,6 +33,14 @@ public class ExampleUnitTest {
     }
     class FragmentActivity extends Activity{
 
+    }
+
+    @Test
+    public void testPinYin(){
+        String name="才";
+//如果是小写字母，则转为大写的，如果是数字，则转为#号
+        char s=PinYinUtils.getStringFirstChar(name);
+        System.out.println(s);
     }
 
 
