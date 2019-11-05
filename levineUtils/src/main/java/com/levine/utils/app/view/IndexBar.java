@@ -15,13 +15,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.levine.utils.R;
+import com.levine.utils.app.data.BaseBean;
+import com.levine.utils.base.LogUtils;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class IndexBar extends AppCompatTextView {
 
@@ -45,6 +49,7 @@ public class IndexBar extends AppCompatTextView {
     private int selectedTextColor = Color.RED;
     private Paint mPaint;
     private List<String> mIndexDatas = null;
+    private List<BaseBean> mSourceDatas=null;
 
     private int mGapHeight;//每个index区域的高度
     private int mWidth = 0;
@@ -54,6 +59,7 @@ public class IndexBar extends AppCompatTextView {
 
     private TextView mPressedShowTextView;
     private LinearLayoutManager mLayoutManager;
+    private RecyclerView recyclerView;
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         mIndexDatas = new ArrayList<>();
@@ -139,11 +145,20 @@ public class IndexBar extends AppCompatTextView {
         return this;
     }
 
-    public IndexBar setmIndexDatas(List<String> mIndexDatas) {
-        this.mIndexDatas = mIndexDatas;
+    public IndexBar setmIndexDatas(List<BaseBean> sourceDatas) {
+        this.mSourceDatas=sourceDatas;
+        this.mIndexDatas = getmIndexDatas(sourceDatas);
         return this;
     }
 
+    private List<String> getmIndexDatas(List<BaseBean> sourceDatas){
+        List<String> list1 = new ArrayList<>();
+        for (BaseBean bean : sourceDatas) {
+            if (!list1.contains(bean.getBeanType()))
+                list1.add(bean.getBeanType());
+        }
+        return list1;
+    }
 
     public IndexBar setIndexTextColor(int textColor) {
         this.textColor = textColor;
@@ -153,6 +168,33 @@ public class IndexBar extends AppCompatTextView {
     public IndexBar setSelectedTextColor(int selectedTextColor) {
         this.selectedTextColor = selectedTextColor;
         return this;
+    }
+
+    public IndexBar setRecyclerView(RecyclerView recyclerView){
+        this.recyclerView=recyclerView;
+        this.mLayoutManager= (LinearLayoutManager) recyclerView.getLayoutManager();
+        addRecyclerViewScrollListener(recyclerView);
+        return this;
+    }
+
+    /**
+     * 在setmIndexDatas方法之后
+     * @param mRecyclerView
+     */
+    private void addRecyclerViewScrollListener(RecyclerView mRecyclerView) {
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                        LinearLayoutManager mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                        int pos = mLayoutManager.findFirstVisibleItemPosition();
+                        String type = mSourceDatas.get(pos).getBeanType();
+                        int temp =mIndexDatas.indexOf(type);
+                        setSelectedIndexBarPosition(temp);
+            }
+        });
+
     }
 
     @Override
@@ -191,12 +233,12 @@ public class IndexBar extends AppCompatTextView {
             case MeasureSpec.EXACTLY:
                 measureHeight = hSize;
                 break;
-            case MeasureSpec.UNSPECIFIED:
-
             case MeasureSpec.AT_MOST:
                 measureHeight = Math.min(measureHeight, hSize);//wSize此时是父控件能给子View分配的最大空间
                 break;
+            case MeasureSpec.UNSPECIFIED:
 
+                break;
         }
 
         setMeasuredDimension(measureWidth, measureHeight);
@@ -294,10 +336,10 @@ public class IndexBar extends AppCompatTextView {
         return this;
     }
 
-    public IndexBar setmLayoutManager(LinearLayoutManager mLayoutManager) {
-        this.mLayoutManager = mLayoutManager;
-        return this;
-    }
+//    public IndexBar setmLayoutManager(LinearLayoutManager mLayoutManager) {
+//        this.mLayoutManager = mLayoutManager;
+//        return this;
+//    }
 
     /**
      * 根据传入的pos返回tag
@@ -310,8 +352,8 @@ public class IndexBar extends AppCompatTextView {
             return -1;
         }
 
-        for (int i = 0; i < mIndexDatas.size(); i++) {
-            if (tag.equals(mIndexDatas.get(i))) {
+        for (int i = 0; i < mSourceDatas.size(); i++) {
+            if (tag.equals(mSourceDatas.get(i).getBeanType())) {
                 return i;
             }
         }

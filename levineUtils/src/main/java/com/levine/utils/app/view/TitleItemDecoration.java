@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class TitleItemDecoration extends RecyclerView.ItemDecoration {
 
-    private List<BaseBean> mDatas;
+    private List<?extends BaseBean> mDatas;
 
     private int mTitleHeight;
 
@@ -46,7 +46,7 @@ public class TitleItemDecoration extends RecyclerView.ItemDecoration {
 
     ;
 
-    public TitleItemDecoration(List datas, int height) {
+    public TitleItemDecoration(List<? extends BaseBean> datas, int height) {
         this.mDatas = datas;
         this.mTitleHeight = height;
         mPaint = new Paint();

@@ -27,7 +27,7 @@ public class PaddingItemDecoration extends RecyclerView.ItemDecoration {
     private Paint mPaint;
     private int mTitleBgColor = Color.parseColor("#D8D8D8");
 
-    private List<BaseBean> dataList = null;
+    private List<? extends BaseBean> dataList = null;
 
     public PaddingItemDecoration(int orientation) {
 
@@ -37,7 +37,7 @@ public class PaddingItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    public PaddingItemDecoration setDataList(List<BaseBean> dataList) {
+    public PaddingItemDecoration setDataList(List<?extends BaseBean> dataList) {
         this.dataList = dataList;
         return this;
     }

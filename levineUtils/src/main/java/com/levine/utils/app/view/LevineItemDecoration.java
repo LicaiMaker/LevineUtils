@@ -30,7 +30,7 @@ public class LevineItemDecoration extends RecyclerView.ItemDecoration {
     private int mPaddingEnd = 0;
 
 
-    private List<BaseBean> dataList = null;
+    private List<?extends BaseBean> dataList = null;
     /**
      * Current orientation. Either {@link #HORIZONTAL} or {@link #VERTICAL}.
      */
@@ -78,7 +78,7 @@ public class LevineItemDecoration extends RecyclerView.ItemDecoration {
         this.mPaddingEnd = mPaddingEnd;return this;
     }
 
-    public LevineItemDecoration setDataList(List<BaseBean> dataList) {
+    public LevineItemDecoration setDataList(List<? extends BaseBean> dataList) {
         this.dataList = dataList;return this;
     }
 
