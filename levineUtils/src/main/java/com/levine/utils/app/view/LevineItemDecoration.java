@@ -51,32 +51,35 @@ public class LevineItemDecoration extends RecyclerView.ItemDecoration {
     }
 
 
-    public void setOrientation(int orientation) {
+    public LevineItemDecoration setOrientation(int orientation) {
         if (orientation != HORIZONTAL && orientation != VERTICAL) {
             throw new IllegalArgumentException(
                     "Invalid orientation. It should be either HORIZONTAL or VERTICAL");
         }
         mOrientation = orientation;
+        return this;
     }
 
 
-    public void setDrawable(@NonNull Drawable drawable) {
+    public LevineItemDecoration setDrawable(@NonNull Drawable drawable) {
         if (drawable == null) {
             throw new IllegalArgumentException("Drawable cannot be null.");
         }
         mDivider = drawable;
+        return this;
     }
 
-    public void setmPaddingStart(int mPaddingStart) {
+    public LevineItemDecoration setmPaddingStart(int mPaddingStart) {
         this.mPaddingStart = mPaddingStart;
+        return this;
     }
 
-    public void setmPaddingEnd(int mPaddingEnd) {
-        this.mPaddingEnd = mPaddingEnd;
+    public LevineItemDecoration setmPaddingEnd(int mPaddingEnd) {
+        this.mPaddingEnd = mPaddingEnd;return this;
     }
 
-    public void setDataList(List<BaseBean> dataList) {
-        this.dataList = dataList;
+    public LevineItemDecoration setDataList(List<BaseBean> dataList) {
+        this.dataList = dataList;return this;
     }
 
     @Override
@@ -91,7 +94,7 @@ public class LevineItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    public boolean drawDivider(View child) {
+    private boolean drawDivider(View child) {
         if(dataList==null){
             return true;
         }

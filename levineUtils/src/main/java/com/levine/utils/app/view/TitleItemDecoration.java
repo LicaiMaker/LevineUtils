@@ -54,29 +54,29 @@ public class TitleItemDecoration extends RecyclerView.ItemDecoration {
         mBounds = new Rect();
     }
 
-    public void setmTitleBgColor(int mTitleBgColor) {
-        this.mTitleBgColor = mTitleBgColor;
+    public TitleItemDecoration setmTitleBgColor(int mTitleBgColor) {
+        this.mTitleBgColor = mTitleBgColor;return this;
     }
 
-    public void setmTitleFontColor(int mTitleFontColor) {
-        this.mTitleFontColor = mTitleFontColor;
+    public TitleItemDecoration setmTitleFontColor(int mTitleFontColor) {
+        this.mTitleFontColor = mTitleFontColor;return this;
     }
 
-    public void setmTitleTextSize(int mTitleTextSize) {
+    public TitleItemDecoration setmTitleTextSize(int mTitleTextSize) {
         this.mTitleTextSize = mTitleTextSize;
-        mPaint.setTextSize(mTitleTextSize);
+        mPaint.setTextSize(mTitleTextSize);return this;
     }
 
-    public void setmTitleMarginLeft(int mTitleMarginLeft) {
-        this.mTitleMarginLeft = mTitleMarginLeft;
+    public TitleItemDecoration setmTitleMarginLeft(int mTitleMarginLeft) {
+        this.mTitleMarginLeft = mTitleMarginLeft;return this;
     }
 
-    public void setSelectedAnimation(int selectedAnimation) {
-        this.selectedAnimation = selectedAnimation;
+    public TitleItemDecoration setSelectedAnimation(int selectedAnimation) {
+        this.selectedAnimation = selectedAnimation;return this;
     }
 
-    public void setHeaderViewLayoutId(int headerViewLayoutId) {
-        this.headerViewLayoutId = headerViewLayoutId;
+    public TitleItemDecoration setHeaderViewLayoutId(int headerViewLayoutId) {
+        this.headerViewLayoutId = headerViewLayoutId;return this;
     }
 
 

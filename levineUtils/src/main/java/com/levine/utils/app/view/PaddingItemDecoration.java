@@ -74,7 +74,7 @@ public class PaddingItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    public boolean drawDivider(View child) {
+    private boolean drawDivider(View child) {
         if (dataList == null) {
             return true;
         }
