@@ -15,7 +15,7 @@ import androidx.annotation.NonNull;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-public class VariableItemDecoration extends RecyclerView.ItemDecoration {
+public class PaddingItemDecoration extends RecyclerView.ItemDecoration {
     public static final int HORIZONTAL = LinearLayout.HORIZONTAL;
     public static final int VERTICAL = LinearLayout.VERTICAL;
 
@@ -29,7 +29,7 @@ public class VariableItemDecoration extends RecyclerView.ItemDecoration {
 
     private List<BaseBean> dataList = null;
 
-    public VariableItemDecoration(int orientation) {
+    public PaddingItemDecoration(int orientation) {
 
         mPaint = new Paint();
         if (orientation == 0 || orientation == 1) {
@@ -37,20 +37,24 @@ public class VariableItemDecoration extends RecyclerView.ItemDecoration {
         }
     }
 
-    public void setDataList(List<BaseBean> dataList) {
+    public PaddingItemDecoration setDataList(List<BaseBean> dataList) {
         this.dataList = dataList;
+        return this;
     }
 
-    public void setmDividerWidth(int mDividerWidth) {
+    public PaddingItemDecoration setmDividerWidth(int mDividerWidth) {
         this.mDividerWidth = mDividerWidth;
+        return this;
     }
 
-    public void setmPaddingStart(int mPaddingStart) {
+    public PaddingItemDecoration setmPaddingStart(int mPaddingStart) {
         this.mPaddingStart = mPaddingStart;
+        return this;
     }
 
-    public void setmPaddingEnd(int mPaddingEnd) {
+    public PaddingItemDecoration setmPaddingEnd(int mPaddingEnd) {
         this.mPaddingEnd = mPaddingEnd;
+        return this;
     }
 
     @Override

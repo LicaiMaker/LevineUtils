@@ -4,12 +4,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.levine.utils.app.data.BaseBean;
 
 import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,15 +33,18 @@ public class TitleItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mTitleMarginLeft = 10;
 
-    private int selectedAnimation=TopBarChangeAnimation.TRANSLATION;
+    private int selectedAnimation = TopBarChangeAnimation.TRANSLATION;
+
+    private int headerViewLayoutId = 0;
+
+    public class TopBarChangeAnimation {
+        public static final int TRANSLATION = 0;
+        private static final int OVERLAY = 1;
 
 
-    public class    TopBarChangeAnimation{
-       public static final  int   TRANSLATION=0;
-       private static final int   OVERLAY=1;
+    }
 
-
-    };
+    ;
 
     public TitleItemDecoration(List datas, int height) {
         this.mDatas = datas;
@@ -70,6 +74,11 @@ public class TitleItemDecoration extends RecyclerView.ItemDecoration {
     public void setSelectedAnimation(int selectedAnimation) {
         this.selectedAnimation = selectedAnimation;
     }
+
+    public void setHeaderViewLayoutId(int headerViewLayoutId) {
+        this.headerViewLayoutId = headerViewLayoutId;
+    }
+
 
     @Override
     public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -136,7 +145,6 @@ public class TitleItemDecoration extends RecyclerView.ItemDecoration {
         boolean isSavingCanvas = false;
         if (position + 1 < mDatas.size()) {
             if (beanType != null && !mDatas.get(position + 1).getBeanType().equals(beanType)) {
-
                 if (child.getHeight() + child.getTop() < mTitleHeight) {
                     //当可见child部分小于title的高度
                     c.save();
@@ -149,14 +157,57 @@ public class TitleItemDecoration extends RecyclerView.ItemDecoration {
                 }
             }
         }
-        mPaint.setColor(mTitleBgColor);
-        //绘制背景
-        c.drawRect(parent.getPaddingLeft(), parent.getPaddingTop(), parent.getRight() - parent.getPaddingRight(), parent.getPaddingTop() + mTitleHeight, mPaint);
-        //绘制文字
-        mPaint.setColor(mTitleFontColor);
-        mPaint.getTextBounds(beanType, 0, mDatas.get(position).getBeanType().length(), mBounds);
-        c.drawText(beanType, child.getPaddingLeft() + parent.getPaddingLeft() + mTitleMarginLeft, parent.getPaddingTop() + mTitleHeight - (mTitleHeight / 2 - mBounds.height() / 2), mPaint);
+        if (headerViewLayoutId != 0) {
+            //设置了悬停的头部view
+            drawHeaderView(c, parent, headerViewLayoutId);
+        } else {
+            //采用默认的头部view
+            mPaint.setColor(mTitleBgColor);
+            //绘制背景
+            c.drawRect(parent.getPaddingLeft(), parent.getPaddingTop(), parent.getRight() - parent.getPaddingRight(), parent.getPaddingTop() + mTitleHeight, mPaint);
+            //绘制文字
+            mPaint.setColor(mTitleFontColor);
+            mPaint.getTextBounds(beanType, 0, mDatas.get(position).getBeanType().length(), mBounds);
+            c.drawText(beanType, child.getPaddingLeft() + parent.getPaddingLeft() + mTitleMarginLeft, parent.getPaddingTop() + mTitleHeight - (mTitleHeight / 2 - mBounds.height() / 2), mPaint);
+        }
         if (isSavingCanvas)
             c.restore();
+    }
+
+    private void drawHeaderView(@NonNull Canvas c, @NonNull RecyclerView parent, int viewLayoutId) {
+        LayoutInflater mInflater = LayoutInflater.from(parent.getContext());
+        View toDrawView = mInflater.inflate(viewLayoutId, parent, false);
+        int toDrawWidthSpec;//用于测量的widthMeasureSpec
+        int toDrawHeightSpec;//用于测量的heightMeasureSpec
+        //拿到复杂布局的LayoutParams，如果为空，就new一个。
+        // 后面需要根据这个lp 构建toDrawWidthSpec，toDrawHeightSpec
+        ViewGroup.LayoutParams lp = toDrawView.getLayoutParams();
+        if (lp == null) {
+            lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);//这里是根据复杂布局layout的width height，new一个Lp
+            toDrawView.setLayoutParams(lp);
+        }
+        if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
+            //如果是MATCH_PARENT，则用父控件能分配的最大宽度和EXACTLY构建MeasureSpec。
+            toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight(), View.MeasureSpec.EXACTLY);
+        } else if (lp.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            //如果是WRAP_CONTENT，则用父控件能分配的最大宽度和AT_MOST构建MeasureSpec。
+            toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight(), View.MeasureSpec.AT_MOST);
+        } else {
+            //否则则是具体的宽度数值，则用这个宽度和EXACTLY构建MeasureSpec。
+            toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(lp.width, View.MeasureSpec.EXACTLY);
+        }
+        //高度同理
+        if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
+            toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom(), View.MeasureSpec.EXACTLY);
+        } else if (lp.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom(), View.MeasureSpec.AT_MOST);
+        } else {
+            toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(lp.width, View.MeasureSpec.EXACTLY);
+        }
+        //依次调用 measure,layout,draw方法，将复杂头部显示在屏幕上。
+        toDrawView.measure(toDrawWidthSpec, toDrawHeightSpec);
+        toDrawView.layout(parent.getPaddingLeft(), parent.getPaddingTop(),
+                parent.getPaddingLeft() + toDrawView.getMeasuredWidth(), parent.getPaddingTop() + toDrawView.getMeasuredHeight());
+        toDrawView.draw(c);
     }
 }

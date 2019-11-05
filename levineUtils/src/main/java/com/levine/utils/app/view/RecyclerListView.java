@@ -42,4 +42,5 @@ public class RecyclerListView extends RecyclerView {
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(this);
     }
+
 }

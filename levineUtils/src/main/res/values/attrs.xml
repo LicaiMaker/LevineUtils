@@ -12,4 +12,14 @@
         <attr name="borderRadius"/>
         <attr name="type" />
     </declare-styleable>
+
+<!--  侧边栏indexbar相关属性  -->
+    <attr name="textSize" format="dimension|reference" />
+    <declare-styleable name="IndexBar">
+        <attr name="textSize" />
+        <attr name="pressBackground" format="color|reference" />
+        <attr name="unpressBackground" format="reference|color"/>
+    </declare-styleable>
+
+
 </resources>
