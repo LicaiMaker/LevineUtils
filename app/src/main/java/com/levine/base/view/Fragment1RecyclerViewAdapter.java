@@ -17,14 +17,11 @@ import com.levine.utils.app.view.adapter.BaseViewHolder;
 import com.levine.utils.base.LogUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 
 
 public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMap<String, Object>> {
@@ -49,18 +46,17 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
                 final List<BaseBean> list = getCustomerData();
                 Fragment1ListviewAdapter adapter = new Fragment1ListviewAdapter(list, mContext, R.layout.list_item_view);
                 final RecyclerListView recyclerListView = holder.getViewAtId(R.id.mFragment1RV);
-
 //                PaddingItemDecoration variableItemDecoration=new PaddingItemDecoration(1);
 //                variableItemDecoration.setmPaddingStart(30);
 //                variableItemDecoration.setmPaddingEnd(30);
 
 //                recyclerListView.addItemDecoration(variableItemDecoration);
-
-                LevineItemDecoration levineItemDecoration = new LevineItemDecoration(mContext, LinearLayout.VERTICAL);
-                levineItemDecoration.setmPaddingStart(30);
-                levineItemDecoration.setmPaddingEnd(30);
-                levineItemDecoration.setDrawable(ContextCompat.getDrawable(mContext, R.drawable.item_divider));
-                levineItemDecoration.setDataList(list);
+                LevineItemDecoration levineItemDecoration =
+                        new LevineItemDecoration(mContext, LinearLayout.VERTICAL)
+                                .setmPaddingStart(30)
+                                .setmPaddingEnd(30)
+                                .setDrawable(ContextCompat.getDrawable(mContext, R.drawable.item_divider))
+                                .setDataList(list);
                 recyclerListView.addItemDecoration(levineItemDecoration);
 //                PaddingItemDecoration variableItemDecoration=new PaddingItemDecoration(LinearLayout.VERTICAL);
 //                variableItemDecoration.setDataList(list);
@@ -71,33 +67,47 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
 
                 final IndexBar mIndexBar = holder.getViewAtId(R.id.mIndexBar);
                 TextView mIndexTV = holder.getViewAtId(R.id.mIndexTV);
-                String a[] = {"B", "C", "D", "E", "F", "G"};
-                final List<String> indexBarList=Arrays.asList(a);
-                mIndexBar.setmIndexDatas(indexBarList)
-                        .setmPressedShowTextView(mIndexTV)
-                        .setmLayoutManager((LinearLayoutManager) recyclerListView.getLayoutManager())
-                        .setIndexTextColor(Color.GRAY)
-                        .setSelectedTextColor(Color.BLACK) ;
-                //和indexbar联动
-                recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-                        LinearLayoutManager mLayoutManager= (LinearLayoutManager) recyclerView.getLayoutManager();
-                        int pos=mLayoutManager.findFirstVisibleItemPosition();
-                        String type=list.get(pos).getBeanType();
-                        int temp=indexBarList.indexOf(type.toUpperCase());
-                        mIndexBar.setSelectedIndexBarPosition(temp);
-                        LogUtils.e("type&pos:"+type+","+temp);
 
-                    }
-                });
+//                String a[] = {"B", "C", "D", "E", "F", "G"};
+//                final List<String> indexBarList=Arrays.asList(a);
+
+                final List<String> indexBarList = getIndexBarDataList(list);
+
+                mIndexBar.setmIndexDatas(list)
+                        .setmPressedShowTextView(mIndexTV)
+//                        .setmLayoutManager((LinearLayoutManager) recyclerListView.getLayoutManager())
+                        .setIndexTextColor(Color.GRAY)
+                        .setSelectedTextColor(Color.BLACK)
+                        .setRecyclerView(recyclerListView);
+//                //和indexbar联动
+//                recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                    @Override
+//                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                        super.onScrollStateChanged(recyclerView, newState);
+//                        LinearLayoutManager mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+//                        int pos = mLayoutManager.findFirstVisibleItemPosition();
+//                        String type = list.get(pos).getBeanType();
+//                        int temp = indexBarList.indexOf(type.toUpperCase());
+//                        mIndexBar.setSelectedIndexBarPosition(temp);
+//                        LogUtils.e("type&pos:" + type + "," + temp);
+//
+//                    }
+//                });
                 holder.setRecyclerViewAdapter(R.id.mFragment1RV, adapter);
                 LogUtils.e("setting Fragment1ListviewAdapter：");
                 adapter.notifyDataSetChanged();
                 break;
         }
 
+    }
+
+    private List<String> getIndexBarDataList(List<BaseBean> list) {
+        List<String> list1 = new ArrayList<>();
+        for (BaseBean bean : list) {
+            if (!list1.contains(bean.getBeanType()))
+                list1.add(bean.getBeanType());
+        }
+        return list1;
     }
 
     public List<BaseBean> getCustomerData() {

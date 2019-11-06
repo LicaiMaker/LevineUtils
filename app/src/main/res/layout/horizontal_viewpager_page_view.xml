@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical">
 
     <TextView
@@ -17,13 +18,13 @@
         android:visibility="gone" />
 
     <com.levine.utils.app.view.IndexBar
-android:elevation="4dp"
         android:id="@+id/mIndexBar"
         android:layout_width="30dp"
         android:layout_height="150dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
+        android:elevation="4dp"
         app:pressBackground="@drawable/round_corner_view"
         app:textSize="15sp"
         app:unpressBackground="@drawable/round_corner_view" />
