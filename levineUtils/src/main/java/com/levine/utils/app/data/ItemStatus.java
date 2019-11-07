@@ -1,6 +1,8 @@
 package com.levine.utils.app.data;
 
-public class ItemDataStatus {
+import androidx.annotation.NonNull;
+
+public class ItemStatus {
 
     public static final int ITEM_TYPE_PARENT=0;
     public static final int ITEM_TYPE_CHILD=1;
@@ -31,5 +33,12 @@ public class ItemDataStatus {
 
     public void setChildItemIndex(int childItemIndex) {
         this.childItemIndex = childItemIndex;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String isParent=viewType==0?"父节点":"子节点";
+        return "("+parentItemIndex+","+childItemIndex+")"+"是"+isParent;
     }
 }
