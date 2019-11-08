@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.levine.base.R;
@@ -55,7 +56,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener{
         BaseExpandBean baseExpandBean1=new BaseExpandBean("A",A);
 
         List<String> B=new ArrayList<>();
-        A.add("b1");
+        B.add("b1");
         BaseExpandBean baseExpandBean2=new BaseExpandBean("B",B);
         list.add(baseExpandBean1);
         list.add(baseExpandBean2);
@@ -74,6 +75,7 @@ public class Fragment2 extends Fragment implements View.OnClickListener{
             @Override
             public void convertParentView(BaseViewHolder holder, String itemData) {
                 holder.setText(R.id.parentTV,itemData);
+//                holder.setImageFromRes(R.id.parentIV,R.drawable.icon_list_unexpand);
             }
 
             @Override
@@ -82,7 +84,29 @@ public class Fragment2 extends Fragment implements View.OnClickListener{
             }
         };
 
+        adapter.setmOnExpandListener(new BaseExpandableRecyclerViewAdapter.OnExpandItemListener() {
+            @Override
+            public void onExpanded(View view, int pos) {
+                LogUtils.e("pos:"+pos+" 展开了");
+                ImageView view1=view.findViewById(R.id.parentIV);
+                view1.setImageResource(R.drawable.icon_list_unexpand);
+            }
+
+            @Override
+            public void onCollapsed(View view, int pos) {
+                LogUtils.e("pos:"+pos+" 收缩了");
+                ImageView view1=view.findViewById(R.id.parentIV);
+                view1.setImageResource(R.drawable.icon_list_expand);
+            }
+
+            @Override
+            public void onChildClick(View view, int parentItemIndex, int childItemIndex) {
+                LogUtils.e("pos:（p，c）:"+"("+parentItemIndex+","+childItemIndex+")被点击了");
+            }
+        });
+//        adapter.setOnlyOneItemExpanded(true);
         mFragment2RLV.setAdapter(adapter);
+
 
     }
 
