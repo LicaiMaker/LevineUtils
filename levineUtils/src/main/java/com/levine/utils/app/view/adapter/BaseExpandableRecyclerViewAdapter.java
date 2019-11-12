@@ -29,14 +29,15 @@ public abstract class BaseExpandableRecyclerViewAdapter<T, V> extends RecyclerVi
 
     private LayoutInflater mLayoutInflater;
     private boolean OnlyOneItemExpanded=false;
-
+    private Context mContext;
     private OnBaseItemClickListener mOnItemClickListener;
     private OnExpandItemListener mOnExpandListener;
 
 
     public BaseExpandableRecyclerViewAdapter(Context mContext, List<BaseExpandBean<T, V>> parentList) {
         this.mDataList = parentList;
-        mLayoutInflater = LayoutInflater.from(mContext);
+        this.mContext=mContext;
+        mLayoutInflater = LayoutInflater.from(this.mContext);
         initmParentItemsStatus();
         setOnItemClickListener();
     }
