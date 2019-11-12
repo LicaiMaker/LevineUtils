@@ -23,13 +23,19 @@
 
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab1"
-            android:text="tab1"
+            android:text="page1"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
         <com.google.android.material.tabs.TabItem
             android:id="@+id/tab2"
-            android:text="tab2"
+            android:text="page2"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"/>
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tab3"
+            android:text="page3"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"/>
