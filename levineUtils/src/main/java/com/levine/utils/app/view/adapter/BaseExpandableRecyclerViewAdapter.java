@@ -1,5 +1,5 @@
-/**
- * author: made by levine 2019/11/7
+/*
+  author: made by levine 2019/11/7
  */
 
 package com.levine.utils.app.view.adapter;
@@ -24,12 +24,11 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public abstract class BaseExpandableRecyclerViewAdapter<T, V> extends RecyclerView.Adapter<BaseViewHolder> {
 
-    protected List<BaseExpandBean<T, V>> mDataList;
-    protected List<Boolean> mParentItemStatus;
-    protected Context mContext;
-    protected LayoutInflater mLayoutInflater;
-    protected boolean OnlyOneItemExpanded=false;
+    private List<BaseExpandBean<T, V>> mDataList;
+    private List<Boolean> mParentItemStatus;
 
+    private LayoutInflater mLayoutInflater;
+    private boolean OnlyOneItemExpanded=false;
 
     private OnBaseItemClickListener mOnItemClickListener;
     private OnExpandItemListener mOnExpandListener;
@@ -37,7 +36,6 @@ public abstract class BaseExpandableRecyclerViewAdapter<T, V> extends RecyclerVi
 
     public BaseExpandableRecyclerViewAdapter(Context mContext, List<BaseExpandBean<T, V>> parentList) {
         this.mDataList = parentList;
-        this.mContext = mContext;
         mLayoutInflater = LayoutInflater.from(mContext);
         initmParentItemsStatus();
         setOnItemClickListener();
@@ -58,10 +56,8 @@ public abstract class BaseExpandableRecyclerViewAdapter<T, V> extends RecyclerVi
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layId = viewType;
-        View view = mLayoutInflater.inflate(layId, parent, false);
-        BaseViewHolder viewHolder = new BaseViewHolder(view);
-        return viewHolder;
+        View view = mLayoutInflater.inflate(viewType, parent, false);
+        return  new BaseViewHolder(view);
     }
 
     @Override
@@ -192,7 +188,7 @@ public abstract class BaseExpandableRecyclerViewAdapter<T, V> extends RecyclerVi
     private void collapseParentItem(BaseViewHolder holder,int parentItemIndex) {
         mParentItemStatus.set(parentItemIndex,false);
         notifyItemRangeRemoved(holder.getAdapterPosition()+1,mDataList.get(parentItemIndex).getChild().size());
-        notifyItemRangeChanged(0,getItemCount());
+        notifyItemRangeChanged(holder.getAdapterPosition()+1,getItemCount());
     }
 
     private void expandParentItem(BaseViewHolder holder,int parentItemIndex) {
@@ -202,7 +198,8 @@ public abstract class BaseExpandableRecyclerViewAdapter<T, V> extends RecyclerVi
         }
         mParentItemStatus.set(parentItemIndex,true);
         notifyItemRangeInserted(holder.getAdapterPosition()+1,mDataList.get(parentItemIndex).getChild().size());
-        notifyItemRangeChanged(0,getItemCount());
+        notifyItemRangeChanged(holder.getAdapterPosition()+1,getItemCount());
+
     }
 
 

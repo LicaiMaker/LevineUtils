@@ -21,5 +21,11 @@
         <attr name="unpressBackground" format="reference|color"/>
     </declare-styleable>
 
+    <!--GridRecyclerView相关属性-->
+    <attr name="spanCount" format="integer"/>
+    <declare-styleable name="GridRecyclerViewPager">
+        <attr name="spanCount"/>
+    </declare-styleable>
+
 
 </resources>
