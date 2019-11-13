@@ -42,12 +42,13 @@ public class FragmentFactory {
 
 
     /**
+     * 其中将mCurrentTag重置为null，是为了解决跨activity使用FragmentFactory的问题
      * @param activity        需要FragmentActivity或者AppCompatActivity或者两者的子类
      * @param containerViewId 展示fragment的容器的id
      * @return Fragment object
      */
     public FragmentFactory init(FragmentActivity activity, int containerViewId) {
-
+        mCurrentTag=null;
         this.fragmentClasses = ClassUtils.getClassesByAnnotation(TargetFragmentTag.class, activity.getPackageCodePath(), activity.getPackageName());
         this.activity = activity;
         this.fragmentManager =activity.getSupportFragmentManager();
