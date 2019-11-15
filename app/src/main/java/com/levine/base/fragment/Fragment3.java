@@ -61,10 +61,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener{
                 holder.setImageFromRes(R.id.mFragmentGridItemViewAvatarIV,itemData.getAvatar());
                 holder.setText(R.id.mFragmentGridItemViewNameTV,itemData.getName());
             }
-
         };
         mGridView.setAdapter(adapter);
-
     }
 
     @Override

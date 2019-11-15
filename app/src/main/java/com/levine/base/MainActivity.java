@@ -30,10 +30,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
             LogUtils.e("onCreate savedInstanceState");
             mFactory.restoreCurrentFragmentInfo(savedInstanceState);
         } else {
+            LogUtils.e("onCreate ");
             mFactory.showFragment(FragmentTag.FRAGMENT1);
         }
-
-
     }
 
     @Override
