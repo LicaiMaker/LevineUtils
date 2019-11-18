@@ -189,7 +189,7 @@ public abstract class BaseExpandableRecyclerViewAdapter<T, V> extends RecyclerVi
     private void collapseParentItem(BaseViewHolder holder,int parentItemIndex) {
         mParentItemStatus.set(parentItemIndex,false);
         notifyItemRangeRemoved(holder.getAdapterPosition()+1,mDataList.get(parentItemIndex).getChild().size());
-        notifyItemRangeChanged(holder.getAdapterPosition()+1,getItemCount());
+        notifyItemRangeChanged(holder.getAdapterPosition(),getItemCount());
     }
 
     private void expandParentItem(BaseViewHolder holder,int parentItemIndex) {
@@ -199,7 +199,7 @@ public abstract class BaseExpandableRecyclerViewAdapter<T, V> extends RecyclerVi
         }
         mParentItemStatus.set(parentItemIndex,true);
         notifyItemRangeInserted(holder.getAdapterPosition()+1,mDataList.get(parentItemIndex).getChild().size());
-        notifyItemRangeChanged(holder.getAdapterPosition()+1,getItemCount());
+        notifyItemRangeChanged(holder.getAdapterPosition(),getItemCount());
 
     }
 

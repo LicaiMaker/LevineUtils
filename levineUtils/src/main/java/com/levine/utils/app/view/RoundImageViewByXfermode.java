@@ -90,10 +90,16 @@ public class RoundImageViewByXfermode extends AppCompatImageView {
         if (null == bitmap || bitmap.isRecycled())      {
             //拿到Drawable
             Drawable drawable = getDrawable();
+            if(drawable==null){
+                return;
+            }
             //获取drawable的宽和高
             int dWidth = drawable.getIntrinsicWidth();
             int dHeight = drawable.getIntrinsicHeight();
 
+            if (dWidth == 0 || dHeight == 0) {
+                return;     // nothing to draw (empty bounds)
+            }
             if (drawable != null)           {
                 //创建bitmap
                 bitmap = Bitmap.createBitmap(getWidth(), getHeight(),

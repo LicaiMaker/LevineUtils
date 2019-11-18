@@ -26,8 +26,9 @@ public class GridRecyclerView extends RecyclerView {
         init(context,attrs);
     }
     private int spanCount=3;
-    private final GridLayoutManager gridLayoutManager = new GridLayoutManager(this.getContext(),spanCount);
+    private  GridLayoutManager gridLayoutManager ;
     private void init(Context context,AttributeSet attrs) {
+        gridLayoutManager = new GridLayoutManager(this.getContext(),spanCount);
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.GridRecyclerViewPager);
 

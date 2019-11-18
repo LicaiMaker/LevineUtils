@@ -5,6 +5,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -58,7 +60,7 @@ public class BaseViewHolder extends RecyclerView.ViewHolder {
      */
     public BaseViewHolder setImageFromUrl(int viewId, String imgUrl) {
         ImageView imageView = getViewAtId(viewId);
-//            Glide.with(imageView.getContext()).load(imgUrl).into(imageView);
+        Glide.with(imageView.getContext()).load(imgUrl).into(imageView);
         return this;
     }
 
