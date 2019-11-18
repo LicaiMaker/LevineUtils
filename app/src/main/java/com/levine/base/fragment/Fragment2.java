@@ -14,6 +14,7 @@ import com.levine.utils.app.data.BaseBean;
 import com.levine.utils.app.data.BaseExpandBean;
 import com.levine.utils.app.fragment.TargetFragmentTag;
 import com.levine.utils.app.view.RecyclerListView;
+import com.levine.utils.app.view.RoundImageViewByXfermode;
 import com.levine.utils.app.view.adapter.BaseExpandableRecyclerViewAdapter;
 import com.levine.utils.app.view.adapter.BaseViewHolder;
 import com.levine.utils.base.LevineAnnotationUtils;
@@ -75,12 +76,13 @@ public class Fragment2 extends Fragment implements View.OnClickListener{
             @Override
             public void convertParentView(BaseViewHolder holder, String itemData) {
                 holder.setText(R.id.parentTV,itemData);
-//                holder.setImageFromRes(R.id.parentIV,R.drawable.icon_list_unexpand);
+                holder.setImageFromUrl(R.id.parentIV,"https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=1295982982,3250387184&fm=26&gp=0.jpg");
             }
 
             @Override
             public void convertChildView(BaseViewHolder holder, String itemData) {
                 holder.setText(R.id.childTV,itemData);
+                holder.setImageFromUrl(R.id.childIV,"https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=2188301108,2208747323&fm=26&gp=0.jpg");
             }
         };
 
