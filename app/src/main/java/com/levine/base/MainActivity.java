@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
             LogUtils.e("onCreate ");
             mFactory.showFragment(FragmentTag.FRAGMENT1);
         }
+
+
     }
 
     @Override

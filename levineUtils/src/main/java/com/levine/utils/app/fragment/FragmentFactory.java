@@ -74,7 +74,7 @@ public class FragmentFactory {
         return null;
     }
 
-    private Fragment getFragmentByTag(String tag) {
+    public Fragment getFragmentByTag(String tag) {
         if (!mHashMap.containsKey(tag)) {
             try {
                 Class c = isFragmentTag(tag);
