@@ -10,6 +10,7 @@ import com.levine.base.data.bean.CustomerBean;
 import com.levine.utils.app.data.BaseBean;
 import com.levine.utils.app.view.IndexBar;
 import com.levine.utils.app.view.LevineItemDecoration;
+import com.levine.utils.app.view.PaddingItemDecoration;
 import com.levine.utils.app.view.RecyclerListView;
 import com.levine.utils.app.view.TitleItemDecoration;
 import com.levine.utils.app.view.adapter.BaseRecyclerViewAdapter;
@@ -51,16 +52,18 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
 //                variableItemDecoration.setmPaddingEnd(30);
 
 //                recyclerListView.addItemDecoration(variableItemDecoration);
-                LevineItemDecoration levineItemDecoration =
-                        new LevineItemDecoration(mContext, LinearLayout.VERTICAL)
-                                .setmPaddingStart(30)
-                                .setmPaddingEnd(30)
-                                .setDrawable(ContextCompat.getDrawable(mContext, R.drawable.item_divider))
-                                .setDataList(list);
-                recyclerListView.addItemDecoration(levineItemDecoration);
-//                PaddingItemDecoration variableItemDecoration=new PaddingItemDecoration(LinearLayout.VERTICAL);
-//                variableItemDecoration.setDataList(list);
-//                recyclerListView.addItemDecoration(variableItemDecoration);
+
+//                LevineItemDecoration levineItemDecoration =
+//                        new LevineItemDecoration(mContext, LinearLayout.VERTICAL)
+//                                .setmPaddingStart(30)
+//                                .setmPaddingEnd(30)
+//                                .setDrawable(ContextCompat.getDrawable(mContext, R.drawable.item_divider))
+//                                .setDataList(list);
+//                recyclerListView.addItemDecoration(levineItemDecoration);
+
+                PaddingItemDecoration variableItemDecoration=new PaddingItemDecoration(LinearLayout.VERTICAL);
+                variableItemDecoration.setDataList(list);
+                recyclerListView.addItemDecoration(variableItemDecoration);
                 TitleItemDecoration titleItemDecoration = new TitleItemDecoration(list, 80);
 //                titleItemDecoration.setHeaderViewLayoutId(R.layout.complex_header_item_decoration);
                 recyclerListView.addItemDecoration(titleItemDecoration);

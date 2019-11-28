@@ -1,7 +1,9 @@
 package com.levine.utils.app.data;
 
 
-public abstract class BaseBean{
+import java.io.Serializable;
+
+public abstract class BaseBean implements Serializable {
 
    public  abstract String getBeanType();
 }

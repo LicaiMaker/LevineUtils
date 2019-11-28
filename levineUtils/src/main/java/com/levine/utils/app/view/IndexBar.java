@@ -49,7 +49,7 @@ public class IndexBar extends AppCompatTextView {
     private int selectedTextColor = Color.RED;
     private Paint mPaint;
     private List<String> mIndexDatas = null;
-    private List<BaseBean> mSourceDatas=null;
+    private List<BaseBean> mSourceDatas = null;
 
     private int mGapHeight;//每个index区域的高度
     private int mWidth = 0;
@@ -74,10 +74,10 @@ public class IndexBar extends AppCompatTextView {
             if (attr == R.styleable.IndexBar_textSize) {
                 textSize = typedArray.getDimensionPixelSize(attr, textSize);
             } else if (attr == R.styleable.IndexBar_pressBackground) {
-                mPressedDrawable=typedArray.getDrawable(attr);
-                if(mPressedDrawable==null){
+                mPressedDrawable = typedArray.getDrawable(attr);
+                if (mPressedDrawable == null) {
 
-                mPressedBackground = typedArray.getColor(attr, mPressedBackground);
+                    mPressedBackground = typedArray.getColor(attr, mPressedBackground);
 
                 }
             } else if (attr == R.styleable.IndexBar_unpressBackground) {
@@ -146,12 +146,12 @@ public class IndexBar extends AppCompatTextView {
     }
 
     public IndexBar setmIndexDatas(List<BaseBean> sourceDatas) {
-        this.mSourceDatas=sourceDatas;
+        this.mSourceDatas = sourceDatas;
         this.mIndexDatas = getmIndexDatas(sourceDatas);
         return this;
     }
 
-    private List<String> getmIndexDatas(List<BaseBean> sourceDatas){
+    private List<String> getmIndexDatas(List<BaseBean> sourceDatas) {
         List<String> list1 = new ArrayList<>();
         for (BaseBean bean : sourceDatas) {
             if (!list1.contains(bean.getBeanType()))
@@ -170,28 +170,31 @@ public class IndexBar extends AppCompatTextView {
         return this;
     }
 
-    public IndexBar setRecyclerView(RecyclerView recyclerView){
-        this.recyclerView=recyclerView;
-        this.mLayoutManager= (LinearLayoutManager) recyclerView.getLayoutManager();
+    public IndexBar setRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+        this.mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         addRecyclerViewScrollListener(recyclerView);
         return this;
     }
 
     /**
      * 在setmIndexDatas方法之后
+     *
      * @param mRecyclerView
      */
     private void addRecyclerViewScrollListener(RecyclerView mRecyclerView) {
-
+        if (mIndexDatas.size() == 0) {
+            return;
+        }
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                        LinearLayoutManager mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                        int pos = mLayoutManager.findFirstVisibleItemPosition();
-                        String type = mSourceDatas.get(pos).getBeanType();
-                        int temp =mIndexDatas.indexOf(type);
-                        setSelectedIndexBarPosition(temp);
+                LinearLayoutManager mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int pos = mLayoutManager.findFirstVisibleItemPosition();
+                String type = mSourceDatas.get(pos).getBeanType();
+                int temp = mIndexDatas.indexOf(type);
+                setSelectedIndexBarPosition(temp);
             }
         });
 
@@ -271,16 +274,23 @@ public class IndexBar extends AppCompatTextView {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w;
         mHeight = h;
-        mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
+        if (mIndexDatas.size() != 0) {
+            mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
+        } else {
+            mGapHeight = 20;
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (mIndexDatas.size() == 0) {
+            return true;
+        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if(mPressedDrawable==null) {
+                if (mPressedDrawable == null) {
                     setBackgroundColor(mPressedBackground);//手指按下时背景变色
-                }else {
+                } else {
                     setBackground(mPressedDrawable);
                 }
                 //注意这里没有break，因为down时，也要计算落点 回调监听器

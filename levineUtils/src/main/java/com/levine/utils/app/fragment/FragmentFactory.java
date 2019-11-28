@@ -57,6 +57,11 @@ public class FragmentFactory {
     }
 
 
+    public FragmentManager getFragmentManager(){
+
+        return this.fragmentManager;
+    }
+
     /**
      * 此方法适用于判断str是否是一个FragmentTag接口中的元素
      *
@@ -86,7 +91,6 @@ public class FragmentFactory {
                 e.printStackTrace();
             }
         }
-
         return mHashMap.get(tag);
     }
 
@@ -125,6 +129,7 @@ public class FragmentFactory {
         mCurrentTag = tag;
         return mCurrentTag;
     }
+
 
     public Bundle saveCurrentFragmentInfo(Bundle bundle) {
         if (bundle != null){

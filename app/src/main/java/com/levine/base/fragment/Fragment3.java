@@ -9,6 +9,7 @@ import android.widget.EditText;
 
 import com.levine.base.R;
 import com.levine.base.data.bean.GridBean;
+import com.levine.utils.app.fragment.FragmentFactory;
 import com.levine.utils.app.fragment.TargetFragmentTag;
 import com.levine.utils.app.view.GridRecyclerView;
 import com.levine.utils.app.view.adapter.BaseRecyclerViewAdapter;
@@ -24,6 +25,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 
 @TargetFragmentTag(FragmentTag.FRAGMENT3)
@@ -37,12 +39,18 @@ public class Fragment3 extends Fragment implements View.OnClickListener{
     @LevineOnClick
     @LevineBindView(R.id.mConfirmBTN)
     private Button mConfirmBTN;
+
+
+    @LevineOnClick
+    @LevineBindView(R.id.mNextBTN)
+    private Button mNextBTN;
+    FragmentFactory mFactory;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment3,container,false);
         LevineAnnotationUtils.bind(this,view);
-
+        mFactory=FragmentFactory.getInstance();
         init();
         return view;
     }
@@ -77,6 +85,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener{
                     spanCount=1;
                 }
                 mGridView.setSpanCount(spanCount);
+                break;
+            case R.id.mNextBTN:
+                mFactory.showFragment(FragmentTag.FRAGMENT_NEXT);
                 break;
         }
     }

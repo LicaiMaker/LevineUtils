@@ -1,40 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
 
     >
 
-    <com.levine.utils.app.view.GridRecyclerView
-        android:layout_alignParentStart="true"
-        android:id="@+id/mGridView"
-        app:spanCount="3"
+    <Button
+        android:id="@+id/mNextBTN"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="100dp"
+        android:layout_alignParentStart="true"
+        android:text="下一个Fragment" />
+    <com.levine.utils.app.view.GridRecyclerView
+        android:id="@+id/mGridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+        app:spanCount="3" />
 
     <LinearLayout
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true">
 
-        <EditText
-            android:hint="gridview每行的item个数"
-            android:inputType="number"
-            android:layout_weight="0.8"
-            android:id="@+id/mEditTextET"
-            android:layout_marginTop="20dp"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"/>
         <Button
-            android:text="确定"
-            android:layout_weight="0.2"
             android:id="@+id/mConfirmBTN"
             android:layout_width="0dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:text="确定" />
+
+        <EditText
+            android:id="@+id/mEditTextET"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.8"
+            android:hint="gridview每行的item个数"
+            android:inputType="number" />
     </LinearLayout>
+
 
 
 </RelativeLayout>

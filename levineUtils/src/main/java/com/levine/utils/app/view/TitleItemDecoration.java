@@ -140,6 +140,9 @@ public class TitleItemDecoration extends RecyclerView.ItemDecoration {
     public void onDrawOver(@NonNull Canvas c, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
         super.onDrawOver(c, parent, state);
         int position = ((LinearLayoutManager) parent.getLayoutManager()).findFirstVisibleItemPosition();
+        if(mDatas.size()==0){
+            return;
+        }
         String beanType = mDatas.get(position).getBeanType();
         View child = parent.findViewHolderForLayoutPosition(position).itemView;
         boolean isSavingCanvas = false;
