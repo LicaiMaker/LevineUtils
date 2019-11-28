@@ -2,7 +2,8 @@ package com.levine.base.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.View;
+import android.os.Handler;
+import android.os.Message;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -10,7 +11,6 @@ import com.levine.base.R;
 import com.levine.base.data.bean.CustomerBean;
 import com.levine.utils.app.data.BaseBean;
 import com.levine.utils.app.view.IndexBar;
-import com.levine.utils.app.view.LevineItemDecoration;
 import com.levine.utils.app.view.PaddingItemDecoration;
 import com.levine.utils.app.view.RecyclerListView;
 import com.levine.utils.app.view.TitleItemDecoration;
@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import androidx.core.content.ContextCompat;
-
 
 
 public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMap<String, Object>> {
@@ -31,6 +29,11 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
         super(list, mContext, layId);
     }
 
+    final List<BaseBean> baseBeans = new ArrayList<>();
+    Fragment1ListviewAdapter adapter=null;
+    IndexBar mIndexBar;
+    TextView mIndexTV;
+    RecyclerListView recyclerListView;
 
     @Override
     public void convert(BaseViewHolder holder, HashMap<String, Object> itemData) {
@@ -45,9 +48,8 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
                 break;
             case "normal":
 //                holder.setText(R.id.mFragment1TV, (CharSequence) itemData.get("mFragment1TV"));
-                final List<BaseBean> list = new ArrayList<>();
-                final Fragment1ListviewAdapter adapter = new Fragment1ListviewAdapter(list, mContext, R.layout.list_item_view);
-                final RecyclerListView recyclerListView = holder.getViewAtId(R.id.mFragment1RV);
+               adapter= new Fragment1ListviewAdapter(baseBeans, mContext, R.layout.list_item_view);
+                recyclerListView = holder.getViewAtId(R.id.mFragment1RV);
 //                PaddingItemDecoration variableItemDecoration=new PaddingItemDecoration(1);
 //                variableItemDecoration.setmPaddingStart(30);
 //                variableItemDecoration.setmPaddingEnd(30);
@@ -59,58 +61,67 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
 //                                .setmPaddingStart(30)
 //                                .setmPaddingEnd(30)
 //                                .setDrawable(ContextCompat.getDrawable(mContext, R.drawable.item_divider))
-//                                .setDataList(list);
+//                                .setDataList(baseBeans);
 //                recyclerListView.addItemDecoration(levineItemDecoration);
 
                 PaddingItemDecoration variableItemDecoration=new PaddingItemDecoration(LinearLayout.VERTICAL);
-                variableItemDecoration.setDataList(list);
+                variableItemDecoration.setDataList(baseBeans);
                 recyclerListView.addItemDecoration(variableItemDecoration);
-                TitleItemDecoration titleItemDecoration = new TitleItemDecoration(list, 80);
+                TitleItemDecoration titleItemDecoration = new TitleItemDecoration(baseBeans, 80);
 //                titleItemDecoration.setHeaderViewLayoutId(R.layout.complex_header_item_decoration);
                 recyclerListView.addItemDecoration(titleItemDecoration);
 
-                final IndexBar mIndexBar = holder.getViewAtId(R.id.mIndexBar);
-                TextView mIndexTV = holder.getViewAtId(R.id.mIndexTV);
+                mIndexBar = holder.getViewAtId(R.id.mIndexBar);
+               mIndexTV = holder.getViewAtId(R.id.mIndexTV);
 
 //                String a[] = {"B", "C", "D", "E", "F", "G"};
 //                final List<String> indexBarList=Arrays.asList(a);
 
-                final List<String> indexBarList = getIndexBarDataList(list);
+                final List<String> indexBarList = getIndexBarDataList(baseBeans);
 
-                mIndexBar.setmIndexDatas(list)
+                mIndexBar.setmIndexDatas(baseBeans)
                         .setmPressedShowTextView(mIndexTV)
 //                        .setmLayoutManager((LinearLayoutManager) recyclerListView.getLayoutManager())
                         .setIndexTextColor(Color.GRAY)
                         .setSelectedTextColor(Color.BLACK)
                         .setRecyclerView(recyclerListView);
 
-//                //和indexbar联动
-//                recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//                    @Override
-//                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-//                        super.onScrollStateChanged(recyclerView, newState);
-//                        LinearLayoutManager mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//                        int pos = mLayoutManager.findFirstVisibleItemPosition();
-//                        String type = list.get(pos).getBeanType();
-//                        int temp = indexBarList.indexOf(type.toUpperCase());
-//                        mIndexBar.setSelectedIndexBarPosition(temp);
-//                        LogUtils.e("type&pos:" + type + "," + temp);
-//
-//                    }
-//                });
                 holder.setRecyclerViewAdapter(R.id.mFragment1RV, adapter);
                 LogUtils.e("setting Fragment1ListviewAdapter：");
                 adapter.notifyDataSetChanged();
+                refreshData();
+                break;
+        }
+
+    }
+    private Handler handler=new android.os.Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what==0){
+                baseBeans.addAll( getCustomerData());
+                mIndexBar.setmIndexDatas(baseBeans)
+                        .setRecyclerView(recyclerListView)
+                        .setmPressedShowTextView(mIndexTV);
+
+                adapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+    private void refreshData() {
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
                 try {
-                    Thread.sleep(2000);
+                    Thread.currentThread().sleep(3000);
+                    handler.sendEmptyMessage(0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                list.addAll(getCustomerData());
-                mIndexBar.setmIndexDatas(list);
-                adapter.notifyDataSetChanged();
-                break;
-        }
+            }
+        });
+        thread.start();
 
     }
 

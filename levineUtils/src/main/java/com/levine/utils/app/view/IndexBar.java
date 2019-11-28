@@ -95,7 +95,6 @@ public class IndexBar extends AppCompatTextView {
         mPaint = new Paint();
         mPaint.setTextSize(textSize);
 
-
         initIndexBarListener();
 
     }
@@ -141,13 +140,18 @@ public class IndexBar extends AppCompatTextView {
 
     public IndexBar setTextSize(int textSize) {
         this.textSize = textSize;
-
+        mPaint.setTextSize(textSize);
+        invalidate();
         return this;
     }
 
     public IndexBar setmIndexDatas(List<BaseBean> sourceDatas) {
         this.mSourceDatas = sourceDatas;
         this.mIndexDatas = getmIndexDatas(sourceDatas);
+        if(this.sizeChangedListener!=null){
+            this.sizeChangedListener.onSizeChanged(mIndexDatas);
+        }
+        this.measure(0,0);
         this.invalidate();
         return this;
     }
@@ -163,11 +167,13 @@ public class IndexBar extends AppCompatTextView {
 
     public IndexBar setIndexTextColor(int textColor) {
         this.textColor = textColor;
+        invalidate();
         return this;
     }
 
     public IndexBar setSelectedTextColor(int selectedTextColor) {
         this.selectedTextColor = selectedTextColor;
+        invalidate();
         return this;
     }
 
@@ -175,6 +181,7 @@ public class IndexBar extends AppCompatTextView {
         this.recyclerView = recyclerView;
         this.mLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
         addRecyclerViewScrollListener(recyclerView);
+        invalidate();
         return this;
     }
 
@@ -204,6 +211,7 @@ public class IndexBar extends AppCompatTextView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //取出宽高的MeasureSpec  Mode 和Size
+
         int wMode = MeasureSpec.getMode(widthMeasureSpec);
         int wSize = MeasureSpec.getSize(widthMeasureSpec);
         int hMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -244,7 +252,7 @@ public class IndexBar extends AppCompatTextView {
 
                 break;
         }
-
+        LogUtils.e("---onMeasure() IndexBar measureH&measureW:"+measureHeight+","+measureWidth);
         setMeasuredDimension(measureWidth, measureHeight);
     }
 
@@ -272,18 +280,26 @@ public class IndexBar extends AppCompatTextView {
 
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(final int w, final int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        mWidth = w;
-        mHeight = h;
-        LogUtils.e("---onSizeChanged()before  IndexBar mGapHeight:"+mGapHeight);
-        if (mIndexDatas.size() != 0) {
-            mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
-        } else {
-            mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom())/26;
-        }
+        setSizeChangedListener(new SizeChangedListener() {
+            @Override
+            public void onSizeChanged(List<String> mIndexDatas) {
+                mWidth = w;
+                mHeight = h;
+                LogUtils.e("---onSizeChanged()before  IndexBar mGapHeight:"+mGapHeight);
+                if (mIndexDatas.size() != 0) {
+                    mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
+                } else {
+                    mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom())/10;
+                }
+            }
+        });
+        this.sizeChangedListener.onSizeChanged(mIndexDatas);
+
         LogUtils.e("---onSizeChanged()after  IndexBar mGapHeight:"+mGapHeight);
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -375,5 +391,13 @@ public class IndexBar extends AppCompatTextView {
         return -1;
     }
 
+    private SizeChangedListener sizeChangedListener;
+    private void setSizeChangedListener(SizeChangedListener listener){
+        sizeChangedListener=listener;
+    }
 
+    private interface SizeChangedListener{
+
+        void onSizeChanged(List<String> mIndexDatas);
+    }
 }
