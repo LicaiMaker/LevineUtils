@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.levine.utils.R;
 import com.levine.utils.app.data.BaseBean;
+import com.levine.utils.base.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -257,6 +259,7 @@ public class IndexBar extends AppCompatTextView {
             index = mIndexDatas.get(i);
             mPaint.getTextBounds(index, 0, index.length(), indexBounds);//测量计算文字所在矩形，可以得到宽高
             Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();//获得画笔的FontMetrics，用来计算baseLine。因为drawText的y坐标，代表的是绘制的文字的baseLine的位置
+            LogUtils.e("---onDraw() IndexBar mGapHeight:"+mGapHeight);
             int baseline = (int) ((mGapHeight - fontMetrics.bottom - fontMetrics.top) / 2);//计算出在每格index区域，竖直居中的baseLine值
             if (selectedIndexBarPosition == i) {
                 mPaint.setColor(selectedTextColor);
@@ -273,11 +276,13 @@ public class IndexBar extends AppCompatTextView {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w;
         mHeight = h;
+        LogUtils.e("---onSizeChanged()before  IndexBar mGapHeight:"+mGapHeight);
         if (mIndexDatas.size() != 0) {
             mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
         } else {
             mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom())/26;
         }
+        LogUtils.e("---onSizeChanged()after  IndexBar mGapHeight:"+mGapHeight);
     }
 
     @Override
@@ -296,6 +301,7 @@ public class IndexBar extends AppCompatTextView {
             case MotionEvent.ACTION_MOVE:
                 float y = event.getY();
                 //通过计算判断落点在哪个区域：
+                LogUtils.e("---onTouchEvent()  IndexBar mGapHeight:"+mGapHeight);
                 int pressI = (int) ((y - getPaddingTop()) / mGapHeight);
                 //边界处理（在手指move时，有可能已经移出边界，防止越界）
                 if (pressI < 0) {
