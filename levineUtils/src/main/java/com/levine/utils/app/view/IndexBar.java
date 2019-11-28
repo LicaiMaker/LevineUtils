@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import com.levine.utils.R;
 import com.levine.utils.app.data.BaseBean;
-import com.levine.utils.base.LogUtils;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -148,6 +146,7 @@ public class IndexBar extends AppCompatTextView {
     public IndexBar setmIndexDatas(List<BaseBean> sourceDatas) {
         this.mSourceDatas = sourceDatas;
         this.mIndexDatas = getmIndexDatas(sourceDatas);
+        this.invalidate();
         return this;
     }
 
@@ -277,7 +276,7 @@ public class IndexBar extends AppCompatTextView {
         if (mIndexDatas.size() != 0) {
             mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
         } else {
-            mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom());
+            mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()/26);
         }
     }
 

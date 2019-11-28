@@ -2,6 +2,7 @@ package com.levine.base.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -44,8 +45,8 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
                 break;
             case "normal":
 //                holder.setText(R.id.mFragment1TV, (CharSequence) itemData.get("mFragment1TV"));
-                final List<BaseBean> list = getCustomerData();
-                Fragment1ListviewAdapter adapter = new Fragment1ListviewAdapter(list, mContext, R.layout.list_item_view);
+                final List<BaseBean> list = new ArrayList<>();
+                final Fragment1ListviewAdapter adapter = new Fragment1ListviewAdapter(list, mContext, R.layout.list_item_view);
                 final RecyclerListView recyclerListView = holder.getViewAtId(R.id.mFragment1RV);
 //                PaddingItemDecoration variableItemDecoration=new PaddingItemDecoration(1);
 //                variableItemDecoration.setmPaddingStart(30);
@@ -82,6 +83,7 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
                         .setIndexTextColor(Color.GRAY)
                         .setSelectedTextColor(Color.BLACK)
                         .setRecyclerView(recyclerListView);
+
 //                //和indexbar联动
 //                recyclerListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //                    @Override
@@ -98,6 +100,14 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
 //                });
                 holder.setRecyclerViewAdapter(R.id.mFragment1RV, adapter);
                 LogUtils.e("setting Fragment1ListviewAdapter：");
+                adapter.notifyDataSetChanged();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                list.addAll(getCustomerData());
+                mIndexBar.setmIndexDatas(list);
                 adapter.notifyDataSetChanged();
                 break;
         }
