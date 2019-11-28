@@ -277,7 +277,7 @@ public class IndexBar extends AppCompatTextView {
         if (mIndexDatas.size() != 0) {
             mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
         } else {
-            mGapHeight = 20;
+            mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom());
         }
     }
 
