@@ -48,6 +48,7 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
                 break;
             case "normal":
 //                holder.setText(R.id.mFragment1TV, (CharSequence) itemData.get("mFragment1TV"));
+                baseBeans.add(new CustomerBean("#1"));
                adapter= new Fragment1ListviewAdapter(baseBeans, mContext, R.layout.list_item_view);
                 recyclerListView = holder.getViewAtId(R.id.mFragment1RV);
 //                PaddingItemDecoration variableItemDecoration=new PaddingItemDecoration(1);
@@ -100,10 +101,11 @@ public class Fragment1RecyclerViewAdapter extends BaseRecyclerViewAdapter<HashMa
             super.handleMessage(msg);
             if (msg.what==0){
                 baseBeans.addAll( getCustomerData());
-                mIndexBar.setmIndexDatas(baseBeans)
-                        .setRecyclerView(recyclerListView)
-                        .setmPressedShowTextView(mIndexTV);
-
+                baseBeans.add(new CustomerBean("x"));
+                baseBeans.add(new CustomerBean("y"));
+                baseBeans.add(new CustomerBean("z"));
+//                mIndexBar.setmIndexDatas(baseBeans);
+                mIndexBar.notifyIndexBarDataChanged(baseBeans);
                 adapter.notifyDataSetChanged();
             }
         }

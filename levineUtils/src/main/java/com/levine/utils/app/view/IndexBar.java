@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.levine.utils.R;
 import com.levine.utils.app.data.BaseBean;
+import com.levine.utils.base.DensityUtils;
 import com.levine.utils.base.LogUtils;
 
 import java.util.ArrayList;
@@ -51,9 +52,9 @@ public class IndexBar extends AppCompatTextView {
     private List<String> mIndexDatas = null;
     private List<BaseBean> mSourceDatas = null;
 
-    private int mGapHeight;//每个index区域的高度
-    private int mWidth = 0;
-    private int mHeight = 0;
+    private int mGapHeight=40;//每个index区域的高度
+    private int mWidth = 30;
+    private int mHeight = 100;
     private Drawable mUnPressedDrawable = null;
     private Drawable mPressedDrawable = null;
 
@@ -146,15 +147,22 @@ public class IndexBar extends AppCompatTextView {
     }
 
     public IndexBar setmIndexDatas(List<BaseBean> sourceDatas) {
+
+        notifyIndexBarDataChanged(sourceDatas);
+        return this;
+    }
+
+    public IndexBar notifyIndexBarDataChanged(List<BaseBean> sourceDatas){
         this.mSourceDatas = sourceDatas;
         this.mIndexDatas = getmIndexDatas(sourceDatas);
+        this.measure(0,0);
         if(this.sizeChangedListener!=null){
             this.sizeChangedListener.onSizeChanged(mIndexDatas);
         }
-        this.measure(0,0);
-        this.invalidate();
+
+        addRecyclerViewScrollListener(recyclerView);
         return this;
-    }
+    };
 
     private List<String> getmIndexDatas(List<BaseBean> sourceDatas) {
         List<String> list1 = new ArrayList<>();
@@ -194,6 +202,7 @@ public class IndexBar extends AppCompatTextView {
         if (mIndexDatas.size() == 0) {
             return;
         }
+        if(mRecyclerView==null)return;
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -211,12 +220,12 @@ public class IndexBar extends AppCompatTextView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         //取出宽高的MeasureSpec  Mode 和Size
-
+LogUtils.e("onMeasure");
         int wMode = MeasureSpec.getMode(widthMeasureSpec);
         int wSize = MeasureSpec.getSize(widthMeasureSpec);
         int hMode = MeasureSpec.getMode(heightMeasureSpec);
         int hSize = MeasureSpec.getSize(heightMeasureSpec);
-        int measureWidth = 0, measureHeight = 0;//最终测量出来的宽高
+        int measureWidth = 30, measureHeight =mGapHeight;//默认宽高
 
         //得到合适宽度：
         Rect indexBounds = new Rect();//存放每个绘制的index的Rect区域
@@ -225,7 +234,8 @@ public class IndexBar extends AppCompatTextView {
             index = mIndexDatas.get(i);
             mPaint.getTextBounds(index, 0, index.length(), indexBounds);//测量计算文字所在矩形，可以得到宽高
             measureWidth = Math.max(indexBounds.width(), measureWidth);//循环结束后，得到index的最大宽度
-            measureHeight = Math.max(indexBounds.width(), measureHeight);//循环结束后，得到index的最大高度，然后*size
+            // TODO: 2019/11/29 这里吧mGapHeight加上，可以改变高度，控制台打印高度也是变化了的，但是，需要点击indexbar或者，刷新页面，才能看到效果，
+            measureHeight = Math.max(indexBounds.height()/*+mGapHeight*/, measureHeight);//循环结束后，得到index的最大高度，然后*size
         }
         measureHeight *= mIndexDatas.size();
         switch (wMode) {
@@ -246,18 +256,29 @@ public class IndexBar extends AppCompatTextView {
                 measureHeight = hSize;
                 break;
             case MeasureSpec.AT_MOST:
-                measureHeight = Math.min(measureHeight, hSize);//wSize此时是父控件能给子View分配的最大空间
+                measureHeight = Math.min(measureHeight, hSize);//hSize此时是父控件能给子View分配的最大空间
                 break;
             case MeasureSpec.UNSPECIFIED:
 
                 break;
         }
-        LogUtils.e("---onMeasure() IndexBar measureH&measureW:"+measureHeight+","+measureWidth);
+        if(measureHeight==0){
+            if(mIndexDatas.size()==0){
+                measureHeight= DensityUtils.dp2px(200);//默认高度
+                LogUtils.e("哈哈1："+measureHeight);
+            }
+        }
+        if (measureWidth==0){
+            measureWidth=30;
+        }
         setMeasuredDimension(measureWidth, measureHeight);
     }
 
+
+
     @Override
     protected void onDraw(Canvas canvas) {
+        LogUtils.e("onDraw");
         int t = getPaddingTop();//top的基准点(支持padding)
         Rect indexBounds = new Rect();//存放每个绘制的index的Rect区域
         String index;//每个要绘制的index内容
@@ -267,7 +288,6 @@ public class IndexBar extends AppCompatTextView {
             index = mIndexDatas.get(i);
             mPaint.getTextBounds(index, 0, index.length(), indexBounds);//测量计算文字所在矩形，可以得到宽高
             Paint.FontMetrics fontMetrics = mPaint.getFontMetrics();//获得画笔的FontMetrics，用来计算baseLine。因为drawText的y坐标，代表的是绘制的文字的baseLine的位置
-            LogUtils.e("---onDraw() IndexBar mGapHeight:"+mGapHeight);
             int baseline = (int) ((mGapHeight - fontMetrics.bottom - fontMetrics.top) / 2);//计算出在每格index区域，竖直居中的baseLine值
             if (selectedIndexBarPosition == i) {
                 mPaint.setColor(selectedTextColor);
@@ -282,22 +302,24 @@ public class IndexBar extends AppCompatTextView {
     @Override
     protected void onSizeChanged(final int w, final int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+
         setSizeChangedListener(new SizeChangedListener() {
             @Override
             public void onSizeChanged(List<String> mIndexDatas) {
+
+                LogUtils.e("onSizeChanged");
                 mWidth = w;
                 mHeight = h;
-                LogUtils.e("---onSizeChanged()before  IndexBar mGapHeight:"+mGapHeight);
                 if (mIndexDatas.size() != 0) {
                     mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom()) / mIndexDatas.size();
                 } else {
-                    mGapHeight = (mHeight - getPaddingTop() - getPaddingBottom())/10;
+                    mGapHeight = DensityUtils.dp2px(55);
                 }
+                IndexBar.this.invalidate();
             }
         });
         this.sizeChangedListener.onSizeChanged(mIndexDatas);
 
-        LogUtils.e("---onSizeChanged()after  IndexBar mGapHeight:"+mGapHeight);
     }
 
 
@@ -317,7 +339,6 @@ public class IndexBar extends AppCompatTextView {
             case MotionEvent.ACTION_MOVE:
                 float y = event.getY();
                 //通过计算判断落点在哪个区域：
-                LogUtils.e("---onTouchEvent()  IndexBar mGapHeight:"+mGapHeight);
                 int pressI = (int) ((y - getPaddingTop()) / mGapHeight);
                 //边界处理（在手指move时，有可能已经移出边界，防止越界）
                 if (pressI < 0) {
