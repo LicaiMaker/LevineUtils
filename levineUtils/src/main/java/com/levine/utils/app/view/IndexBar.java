@@ -50,7 +50,7 @@ public class IndexBar extends AppCompatTextView {
     private int selectedTextColor = Color.RED;
     private Paint mPaint;
     private List<String> mIndexDatas = null;
-    private List<BaseBean> mSourceDatas = null;
+    private List<? extends BaseBean> mSourceDatas = null;
 
     private int mGapHeight=40;//每个index区域的高度
     private int mWidth = 30;
@@ -146,13 +146,13 @@ public class IndexBar extends AppCompatTextView {
         return this;
     }
 
-    public IndexBar setmIndexDatas(List<BaseBean> sourceDatas) {
+    public IndexBar setmIndexDatas(List<? extends BaseBean> sourceDatas) {
 
         notifyIndexBarDataChanged(sourceDatas);
         return this;
     }
 
-    public IndexBar notifyIndexBarDataChanged(List<BaseBean> sourceDatas){
+    public IndexBar notifyIndexBarDataChanged(List<? extends BaseBean> sourceDatas){
         this.mSourceDatas = sourceDatas;
         this.mIndexDatas = getmIndexDatas(sourceDatas);
         this.measure(0,0);
@@ -164,7 +164,7 @@ public class IndexBar extends AppCompatTextView {
         return this;
     };
 
-    private List<String> getmIndexDatas(List<BaseBean> sourceDatas) {
+    private List<String> getmIndexDatas(List<? extends BaseBean> sourceDatas) {
         List<String> list1 = new ArrayList<>();
         for (BaseBean bean : sourceDatas) {
             if (!list1.contains(bean.getBeanType()))
