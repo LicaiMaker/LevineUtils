@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
             case 2:
                 mFactory.showFragment(FragmentTag.FRAGMENT3);
                 break;
+            case 3:
+                mFactory.showFragment(FragmentTag.FRAGMENT4);
+                break;
         }
     }
 
