@@ -3,13 +3,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_marginHorizontal="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/mAttendanceDateChangeLL"
+        android:layout_width="match_parent"
+        android:background="@drawable/bottom_border_view"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/mAttendanceDateChangeLastIV"
+            android:layout_weight="1"
+            android:tint="#000000"
+            android:gravity="left"
+            android:src="@drawable/left_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+        <TextView
+            android:id="@+id/mAttendanceDateChangeDisplayTV"
+            android:layout_weight="100"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="2019-12"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/mAttendanceDateChangeNextIV"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:tint="#000000"
+            android:src="@drawable/right_arrow"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+    </LinearLayout>
     <com.levine.utils.app.view.GridRecyclerView
         android:id="@+id/mWeekDaysGRV"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mAttendanceDateChangeLL"
         app:spanCount="7"
         android:layout_width="match_parent"
-        android:layout_height="100dp"/>
+        android:layout_height="wrap_content"/>
 
     <com.levine.utils.app.view.GridRecyclerView
         android:id="@+id/mMonthDaysGRV"

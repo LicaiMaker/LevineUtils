@@ -26,7 +26,7 @@ public class DateUtils {
     /**
      * 获取某年某月的天数
      * @param year
-     * @param month
+     * @param month(1-12)
      * @return
      */
     public static int getDaysOfMonth(int year, int month) {
@@ -45,6 +45,7 @@ public class DateUtils {
         int mYear= Integer.valueOf(currentTime.split("-")[0]);
         int mMonth= Integer.valueOf(currentTime.split("-")[1]);
         int mDay= Integer.valueOf(currentTime.split("-")[2]);
+
         if(mYear==year&&mMonth==month&&mDay==day){
             return true;
         }
@@ -123,15 +124,85 @@ public class DateUtils {
 
 
     /**
+     * 获取某一天是星期几
+     * @param year 年
+     * @param month 月(1-12)
+     * @param day(1-31)
+     * @return
+     */
+    public static int getWeekDayByDay(int year,int month,int day){
+        int daysOfMonth=getDaysOfMonth(year,month);
+        if(day>daysOfMonth||day<1){
+            throw new Error(String.format("%d年%d月没有第%d天",year,month,day));
+        }
+
+        if (month>12||month<1){
+            throw new Error(String.format("%d年没有第%d月",year,month));
+        }
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.YEAR,year);
+        a.set(Calendar.MONTH,month-1);
+        a.set(Calendar.DAY_OF_MONTH,day);
+
+        int i = a.get(Calendar.DAY_OF_WEEK);
+        switch (i){
+            case 1:return 7;//星期天
+            case 2:return 1;//星期一
+            case 3:return 2;//星期二
+            case 4:return 3;//星期三
+            case 5:return 4;//星期四
+            case 6:return 5;//星期五
+            default:return 6;//星期六
+        }
+    }
+
+    /**
+     * 获取某一天是星期几
+     * @param date
+     * @return
+     */
+    public static int getWeekDayByDay(Date date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentTime = sdf.format(date);
+        int year = Integer.valueOf(currentTime.split("-")[0]);
+        int month = Integer.valueOf(currentTime.split("-")[1]);
+        int day = Integer.valueOf(currentTime.split("-")[2]);
+        LogUtils.e(String.format("date:%d-%d-%d",year,month,day));
+        int daysOfMonth=getDaysOfMonth(year,month);
+        if(day>daysOfMonth||day<1){
+            throw new Error(String.format("%d年%d月没有第%d天",year,month,day));
+        }
+
+        if (month>12||month<1){
+            throw new Error(String.format("%d年没有第%d月",year,month));
+        }
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.YEAR,year);
+        a.set(Calendar.MONTH,month-1);
+        a.set(Calendar.DAY_OF_MONTH,day);
+
+        int i = a.get(Calendar.DAY_OF_WEEK);
+        switch (i){
+            case 1:return 7;//星期天
+            case 2:return 1;//星期一
+            case 3:return 2;//星期二
+            case 4:return 3;//星期三
+            case 5:return 4;//星期四
+            case 6:return 5;//星期五
+            default:return 6;//星期六
+        }
+    }
+
+    /**
      * 获取Date对象
      * @param year
-     * @param month
+     * @param month 1-12
      * @param day
      * @return
      */
     public static Date getDateByCalendar(int year,int month,int day){
         Calendar calendar=Calendar.getInstance();
-        calendar.set(year,month,day);
+        calendar.set(year,month-1,day);
         return calendar.getTime();
     }
 

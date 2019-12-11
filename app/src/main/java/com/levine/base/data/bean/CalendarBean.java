@@ -15,7 +15,8 @@ public class CalendarBean {
     String attendancePMTime;
     String attendancePMAddress;
 
-    public CalendarBean(Date date, String number, boolean isToday, boolean attendanceAM, String attendanceAMTime, String attendanceAMAddress, boolean attendancePM, String attendancePMTime, String attendancePMAddress,boolean isDayOfMonth) {
+    boolean isSelected=false;
+    public CalendarBean(Date date, String number, boolean isToday, boolean attendanceAM, String attendanceAMTime, String attendanceAMAddress, boolean attendancePM, String attendancePMTime, String attendancePMAddress,boolean isDayOfMonth,boolean isSelected) {
         this.date = date;
         this.number = number;
         this.isToday = isToday;
@@ -26,6 +27,7 @@ public class CalendarBean {
         this.attendancePMTime = attendancePMTime;
         this.attendancePMAddress = attendancePMAddress;
         this.isDayOfMonth=isDayOfMonth;
+        this.isSelected=isSelected;
     }
     public CalendarBean(){}
 
@@ -110,6 +112,17 @@ public class CalendarBean {
 
     public void setDayOfMonth(boolean dayOfMonth) {
         isDayOfMonth = dayOfMonth;
+    }
+
+    /*
+    当前日期是否被选中
+     */
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     @Override
