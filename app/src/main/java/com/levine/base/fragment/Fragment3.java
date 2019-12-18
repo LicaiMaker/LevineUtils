@@ -1,12 +1,15 @@
 package com.levine.base.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.levine.base.Main2Activity;
 import com.levine.base.R;
 import com.levine.base.data.bean.GridBean;
 import com.levine.utils.app.fragment.FragmentFactory;
@@ -80,6 +83,9 @@ public class Fragment3 extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.mConfirmBTN:
+                if(TextUtils.isEmpty(mEditTextET.getText())){
+                    return;
+                }
                 int spanCount=Integer.parseInt(mEditTextET.getText().toString());
                 if(spanCount<=0){
                     spanCount=1;
@@ -87,7 +93,8 @@ public class Fragment3 extends Fragment implements View.OnClickListener{
                 mGridView.setSpanCount(spanCount);
                 break;
             case R.id.mNextBTN:
-                mFactory.showFragment(FragmentTag.FRAGMENT_NEXT);
+//                mFactory.showFragment(FragmentTag.FRAGMENT_NEXT);
+                getActivity().startActivity(new Intent(getActivity(), Main2Activity.class));
                 break;
         }
     }

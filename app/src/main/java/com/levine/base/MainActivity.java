@@ -33,12 +33,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
             LogUtils.e("onCreate ");
             mFactory.showFragment(FragmentTag.FRAGMENT1);
         }
-
-
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        LogUtils.e("onTabSelected:" + tab.getPosition());
         switch (tab.getPosition()) {
             case 0:
                 mFactory.showFragment(FragmentTag.FRAGMENT1);
@@ -91,7 +90,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnT
     @Override
     protected void onResume() {
         super.onResume();
+        mFactory.onResume(this, R.id.mContentFl);
     }
+
+
 
 
     @Override

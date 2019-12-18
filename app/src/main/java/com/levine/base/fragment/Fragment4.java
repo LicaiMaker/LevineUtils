@@ -1,6 +1,7 @@
 package com.levine.base.fragment;
 
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -7,4 +7,5 @@ public interface FragmentTag {
     String FRAGMENT4="f4";
     String FRAGMENT_NEXT="f3_next";
 
+    String FRAGMENT5 = "f5";
 }

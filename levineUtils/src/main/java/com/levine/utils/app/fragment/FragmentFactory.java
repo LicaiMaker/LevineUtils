@@ -1,13 +1,14 @@
 package com.levine.utils.app.fragment;
 
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.levine.utils.base.ClassUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -19,12 +20,12 @@ public class FragmentFactory {
     private static FragmentFactory mFactory;
     private HashMap<String, Fragment> mHashMap = new HashMap<>();
     private int containerViewId = -1;
-    private ArrayList<Class> fragmentClasses;
-    private FragmentActivity activity;
+    private List<Class> fragmentClasses;
     private String mCurrentTag = null;
     private boolean isCallingRestoreStateMethod = false;
-    FragmentManager fragmentManager = null;
-
+    private FragmentManager fragmentManager = null;
+    private FragmentActivity currentActivity;
+    private HashMap<Activity,String> activityTagStack=new HashMap<>();
     private FragmentFactory() {
 
     }
@@ -48,12 +49,26 @@ public class FragmentFactory {
      * @return Fragment object
      */
     public FragmentFactory init(FragmentActivity activity, int containerViewId) {
-        mCurrentTag=null;
+        mCurrentTag="";
+        this.currentActivity=activity;
         this.fragmentClasses = ClassUtils.getClassesByAnnotation(TargetFragmentTag.class, activity.getPackageCodePath(), activity.getPackageName());
-        this.activity = activity;
         this.fragmentManager =activity.getSupportFragmentManager();
         this.containerViewId = containerViewId;
         return this;
+    }
+
+    public void onResume(FragmentActivity activity,int containerViewId){
+        this.fragmentManager =activity.getSupportFragmentManager();
+        this.containerViewId = containerViewId;
+        if(currentActivity!=activity){
+            //已经切换activity
+            currentActivity.getSupportFragmentManager().beginTransaction().detach(getFragmentByTag(mCurrentTag)).commitAllowingStateLoss();
+            mHashMap.remove(mCurrentTag);
+            currentActivity=activity;
+            this.fragmentClasses.addAll(ClassUtils.getClassesByAnnotation(TargetFragmentTag.class, activity.getPackageCodePath(), activity.getPackageName()));
+            mCurrentTag=activityTagStack.get(activity);
+        }
+        activityTagStack.put(activity,mCurrentTag);
     }
 
 
@@ -116,6 +131,7 @@ public class FragmentFactory {
             if (!TextUtils.isEmpty(mCurrentTag)&& !isCallingRestoreStateMethod) {
                 //已经有fragment被初始化了(因为mCurrentTag初始值为null)，则隐藏当前的fragment
                 transaction.hide(getFragmentByTag(mCurrentTag));
+
             }
             if (!baseFragment.isAdded() && fragmentManager.findFragmentByTag(tag)==null) {
                 //如果这个fragment还没有被添加到容器里，说明是第一次加载,没有使用replace方法(fragment会被销毁)，则可以重用fragment
@@ -124,9 +140,10 @@ public class FragmentFactory {
                 //显示fragment
                 transaction.show(baseFragment);
             }
-            transaction.commitAllowingStateLoss();
+            transaction.commitNowAllowingStateLoss();
         }
         mCurrentTag = tag;
+        activityTagStack.put(currentActivity,mCurrentTag);
         return mCurrentTag;
     }
 
