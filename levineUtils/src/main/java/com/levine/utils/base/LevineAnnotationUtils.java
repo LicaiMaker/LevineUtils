@@ -33,19 +33,19 @@ public class LevineAnnotationUtils {
                 try{
                     if(bindView.strValue()!=null&&bindView.strValue()!=""){
                         int value = context.getResources().getIdentifier(bindView.strValue(),"id",context.getPackageName());
-                        LogUtils.e("package name:   "+targetClass.getPackage().getName()+",value:"+value);
                         field.set(currentClass, sourceView.findViewById(value));
+                        if(click!=null)
+                            sourceView.findViewById(value).setOnClickListener((View.OnClickListener) currentClass);
                     }else if(bindView.value()!=-1){
                         field.set(currentClass, sourceView.findViewById(bindView.value()));
+                        if(click!=null)
+                            sourceView.findViewById(bindView.value()).setOnClickListener((View.OnClickListener) currentClass);
                     }else {
-                        throw new AnnotationFormatError("参数格式不正确，其使用value或者strValue");
+                        throw new AnnotationFormatError("参数格式不正确，请使用value或者strValue");
                     }
                 } catch(IllegalAccessException ex){
                     ex.printStackTrace();
                 }
-            }
-            if(bindView!=null&&click!=null){
-                sourceView.findViewById(bindView.value()).setOnClickListener((View.OnClickListener) currentClass);
             }
         }
     }
