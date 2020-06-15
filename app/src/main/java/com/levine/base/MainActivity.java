@@ -12,17 +12,22 @@ import android.widget.Toast;
 import com.google.android.material.tabs.TabLayout;
 import com.levine.base.fragment.FragmentTag;
 import com.levine.utils.app.fragment.FragmentFactory;
+import com.levine.utils.base.LevineAnnotationUtils;
+import com.levine.utils.base.LevineBindView;
 import com.levine.utils.base.LogUtils;
 
 public class MainActivity extends AppCompatActivity implements TabLayout.BaseOnTabSelectedListener {
+
     private FragmentFactory mFactory;
+    @LevineBindView(R.id.mTabLayout)
     private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mTabLayout = findViewById(R.id.mTabLayout);
+        LevineAnnotationUtils.bind(this);
+//        mTabLayout = findViewById(R.id.mTabLayout);
         mTabLayout.addOnTabSelectedListener(this);
         mFactory = FragmentFactory.getInstance().init(this, R.id.mContentFl);
 

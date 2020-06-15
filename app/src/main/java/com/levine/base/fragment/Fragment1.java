@@ -25,9 +25,9 @@ import androidx.fragment.app.Fragment;
 
 @TargetFragmentTag(FragmentTag.FRAGMENT1)
 public class Fragment1 extends Fragment {
-    @LevineBindView(R.id.mFragment1TL)
+    @LevineBindView(strValue = "mFragment1TL")
     TabLayout tabLayout;
-    @LevineBindView(R.id.mRVPager)
+    @LevineBindView(strValue="mRVPager")
     RecyclerViewPager recyclerViewPager;
     @Nullable
     @Override
@@ -35,6 +35,8 @@ public class Fragment1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment1, container, false);
         LevineAnnotationUtils.bind(this,view);
         init(view);
+//        int value=getResources().getIdentifier("mFragment1TL","id",getContext().getPackageName());
+//        LogUtils.e("value:"+value);
         return view;
     }
 

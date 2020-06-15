@@ -7,6 +7,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
+import java.lang.annotation.AnnotationFormatError;
 import java.lang.reflect.Field;
 
 
@@ -15,15 +16,30 @@ public class LevineAnnotationUtils {
 
 
     public static void bind(Object currentClass,View sourceView){
+        Context context=null;
+        if(currentClass instanceof Activity){
+            context=((Activity) currentClass).getApplicationContext();
+        }else if(currentClass instanceof androidx.fragment.app.Fragment) {
+            context= ((androidx.fragment.app.Fragment)currentClass).getActivity().getApplicationContext();
+        }
         Class targetClass = currentClass.getClass();
         Field[] fields = targetClass.getDeclaredFields();
         for(Field field:fields){
             field.setAccessible(true);
             LevineBindView bindView = field.getAnnotation(LevineBindView.class);
+
             LevineOnClick click = field.getAnnotation(LevineOnClick.class);
             if(bindView!=null){
                 try{
-                    field.set(currentClass,sourceView.findViewById(bindView.value()));
+                    if(bindView.strValue()!=null&&bindView.strValue()!=""){
+                        int value = context.getResources().getIdentifier(bindView.strValue(),"id",context.getPackageName());
+                        LogUtils.e("package name:   "+targetClass.getPackage().getName()+",value:"+value);
+                        field.set(currentClass, sourceView.findViewById(value));
+                    }else if(bindView.value()!=-1){
+                        field.set(currentClass, sourceView.findViewById(bindView.value()));
+                    }else {
+                        throw new AnnotationFormatError("参数格式不正确，其使用value或者strValue");
+                    }
                 } catch(IllegalAccessException ex){
                     ex.printStackTrace();
                 }
